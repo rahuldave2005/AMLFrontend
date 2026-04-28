@@ -1,0 +1,17 @@
+.logo-box {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.75rem;
+  background-color: var(--bs-primary);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.profile-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background-color: #dbeafe;
+  color: var(--bs-primary);
+  border: 1px solid #bfdbfe;
+}

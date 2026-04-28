@@ -1,0 +1,14 @@
+.layout-shell {
+  min-height: 100vh;
+}
+
+.layout-content {
+  min-height: 100vh;
+  margin-left: var(--sidebar-width);
+}
+
+@media (max-width: 991.98px) {
+  .layout-content {
+    margin-left: 0;
+  }
+}

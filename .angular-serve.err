@@ -1,0 +1,203 @@
+[1m[33mComponent HMR has been enabled, see https://angular.dev/hmr for more info.[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mNG1: Property 'role' does not exist on type 'AuthUser'. Did you mean 'roles'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.html:9:46:
+[37m      9 │       <div class="fw-semibold">{{ currentUser.[32mrole[37m }}</div>
+        ╵                                               [32m~~~~[0m
+
+  Error occurs in the template of component SidebarComponent.
+
+    src/app/layout/sidebar/sidebar.component.ts:12:15:
+[37m      12 │   templateUrl: [32m'./sidebar.component.html'[37m,
+         ╵                [32m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:14:
+[37m      23 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:14:
+[37m      28 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:14:
+[37m      33 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:38:14:
+[37m      38 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:43:14:
+[37m      43 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:14:
+[37m      23 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:34:
+[37m      23 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:14:
+[37m      28 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:34:
+[37m      28 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:14:
+[37m      33 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:34:
+[37m      33 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:38:14:
+[37m      38 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:43:14:
+[37m      43 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:43:34:
+[37m      43 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m]
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+[39m[22m
+[1m[31m[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:14:
+[37m      23 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:34:
+[37m      23 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"COMPLIANCE OFFICER"' is not assignable to type 'UserRole'. Did you mean '"COMPLIANCE_OFFICER"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:23:48:
+[37m      23 │       roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', [32m'COMPLIANCE OFFICER'[37m]
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:14:
+[37m      28 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:34:
+[37m      28 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"COMPLIANCE OFFICER"' is not assignable to type 'UserRole'. Did you mean '"COMPLIANCE_OFFICER"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:28:48:
+[37m      28 │       roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', [32m'COMPLIANCE OFFICER'[37m]
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:14:
+[37m      33 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN', 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:34:
+[37m      33 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"COMPLIANCE OFFICER"' is not assignable to type 'UserRole'. Did you mean '"COMPLIANCE_OFFICER"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:33:48:
+[37m      33 │       roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', [32m'COMPLIANCE OFFICER'[37m]
+         ╵                                                 [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:38:14:
+[37m      38 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'COMPLIANCE OFFICER']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"COMPLIANCE OFFICER"' is not assignable to type 'UserRole'. Did you mean '"COMPLIANCE_OFFICER"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:38:34:
+[37m      38 │       roles: ['AML SYSTEM ADMIN', [32m'COMPLIANCE OFFICER'[37m]
+         ╵                                   [32m~~~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"AML SYSTEM ADMIN"' is not assignable to type 'UserRole'. Did you mean '"AML_SYSTEM ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:43:14:
+[37m      43 │       roles: [[32m'AML SYSTEM ADMIN'[37m, 'BANK ADMIN']
+         ╵               [32m~~~~~~~~~~~~~~~~~~[0m
+
+
+[31mX [41;31m[[41;97mERROR[41;31m][0m [1mTS2820: Type '"BANK ADMIN"' is not assignable to type 'UserRole'. Did you mean '"BANK_ADMIN"'?[0m [1m[35m[plugin angular-compiler][0m
+
+    src/app/layout/sidebar/sidebar.component.ts:43:34:
+[37m      43 │       roles: ['AML SYSTEM ADMIN', [32m'BANK ADMIN'[37m]
+         ╵                                   [32m~~~~~~~~~~~~[0m
+
+[39m[22m

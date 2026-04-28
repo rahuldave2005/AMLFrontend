@@ -1,0 +1,87 @@
+<div class="login-page d-flex align-items-center justify-content-center px-3 py-4 py-lg-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-xl-10">
+        <div class="card app-card border-0 overflow-hidden">
+          <div class="row g-0">
+            <div class="col-lg-6">
+              <div class="login-visual h-100 d-flex flex-column justify-content-between p-4 p-lg-5">
+                <div>
+                  <div class="brand-mark d-inline-flex align-items-center justify-content-center mb-4">
+                    TM
+                  </div>
+                  <h1 class="display-6 fw-semibold mb-3">Transaction Monitoring System</h1>
+                  <p class="text-muted mb-0">
+                    Secure access for monitoring transactions, alerts, and compliance workflows.
+                  </p>
+                </div>
+
+                <div class="text-center mt-4">
+                  <img
+                    src="images/login-monitoring-illustration.svg"
+                    alt="Transaction monitoring illustration"
+                    class="img-fluid login-image"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="card-body p-4 p-md-5">
+                <div class="mb-4">
+                  <h2 class="h3 mb-2">Sign In</h2>
+                  <p class="text-muted mb-0">Enter your email and password to continue.</p>
+                </div>
+
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input
+                      id="email"
+                      type="email"
+                      class="form-control form-control-lg"
+                      formControlName="email"
+                      placeholder="Enter your email"
+                    />
+                    <div *ngIf="hasError('email', 'required')" class="text-danger small mt-1">
+                      Email is required.
+                    </div>
+                    <div *ngIf="hasError('email', 'email')" class="text-danger small mt-1">
+                      Enter a valid email address.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input
+                      id="password"
+                      type="password"
+                      class="form-control form-control-lg"
+                      formControlName="password"
+                      placeholder="Enter your password"
+                    />
+                    <div *ngIf="hasError('password', 'required')" class="text-danger small mt-1">
+                      Password is required.
+                    </div>
+                    <div *ngIf="hasError('password', 'minlength')" class="text-danger small mt-1">
+                      Password must be at least 6 characters long.
+                    </div>
+                  </div>
+
+                  <div *ngIf="loginError" class="alert alert-danger py-2" role="alert">
+                    {{ loginError }}
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg w-100 mt-2" [disabled]="isSubmitting">
+                    <span *ngIf="!isSubmitting">Login</span>
+                    <span *ngIf="isSubmitting">Signing in...</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

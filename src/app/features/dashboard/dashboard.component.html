@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card app-card border-0">
+      <div class="card-body p-4 p-lg-5">
+        <div *ngIf="currentUser$ | async as currentUser">
+          <span class="badge text-bg-primary px-3 py-2 mb-3">{{ currentUser.primaryRole }}</span>
+          <h1 class="display-6 fw-semibold mb-2">Welcome to the Dashboard</h1>
+          <p class="text-muted mb-0">
+            You are signed in as {{ currentUser.email }} for {{ currentUser.bankName }}.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

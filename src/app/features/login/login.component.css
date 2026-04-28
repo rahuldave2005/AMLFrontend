@@ -1,0 +1,44 @@
+.login-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(37, 99, 235, 0.12), transparent 35%),
+    linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+}
+
+.login-visual {
+  background:
+    linear-gradient(180deg, rgba(37, 99, 235, 0.08) 0%, rgba(37, 99, 235, 0.02) 100%),
+    #f8fbff;
+}
+
+.brand-mark {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 1rem;
+  background-color: var(--bs-primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.08em;
+}
+
+.login-image {
+  max-height: 320px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.form-control {
+  border-color: #cbd5e1;
+}
+
+.form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.15);
+}
+
+@media (max-width: 991.98px) {
+  .login-image {
+    max-height: 240px;
+  }
+}
