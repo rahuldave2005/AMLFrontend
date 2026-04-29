@@ -20,28 +20,44 @@ export class SidebarComponent {
     {
       label: 'Dashboard',
       route: '/dashboard',
-      roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', 'COMPLIANCE OFFICER']
+      roles: ['SYSTEM_ADMIN', 'BANK_ADMIN', 'COMPLIANCE_OFFICER']
     },
     {
-      label: 'Transactions',
-      route: '/transactions',
-      roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', 'COMPLIANCE OFFICER']
+      label: 'Tenant Management',
+      route: '/tenantManagement',
+      roles: ['SYSTEM_ADMIN']
+    },
+    {
+      label: 'View Rules',
+      route: '/rules',
+      roles: ['SYSTEM_ADMIN']
+    },
+    {
+      label: 'Cases',
+      route: '/cases',
+      roles: ['BANK_ADMIN', 'COMPLIANCE_OFFICER']
     },
     {
       label: 'Alerts',
       route: '/alerts',
-      roles: ['AML SYSTEM ADMIN', 'BANK ADMIN', 'COMPLIANCE OFFICER']
+      roles: ['BANK_ADMIN']
     },
     {
-      label: 'Rules',
-      route: '/rules',
-      roles: ['AML SYSTEM ADMIN', 'COMPLIANCE OFFICER']
+      label: 'File Upload',
+      route: '/file-upload',
+      roles: ['BANK_ADMIN']
     },
     {
-      label: 'Users',
-      route: '/users',
-      roles: ['AML SYSTEM ADMIN', 'BANK ADMIN']
-    }
+      label: 'Rule Config Management',
+      route: '/rule-config',
+      roles: ['BANK_ADMIN']
+    },
+    {
+      label: 'Str Filing',
+      route: '/str-filing',
+      roles: ['COMPLIANCE_OFFICER']
+    },
+    
   ];
 
   trackByRoute(index: number, item: SidebarMenuItem): string {

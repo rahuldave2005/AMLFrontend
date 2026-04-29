@@ -1,11 +1,11 @@
 import { Routes } from '@angular/router';
-import { AlertsComponent } from './features/alerts/alerts.component';
+import { AlertsComponent } from './features/tenant/alerts/alerts.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LoginComponent } from './features/login/login.component';
-import { RulesComponent } from './features/rules/rules.component';
-import { TransactionsComponent } from './features/transactions/transactions.component';
-import { UsersComponent } from './features/users/users.component';
+import { RulesComponent } from './features/systemAdmin/rules/rules.component';
 import { LayoutComponent } from './layout/layout.component';
+import { FileUploadComponent } from './features/tenant/file-upload/file-upload.component';
+import { StrFilingComponent } from './features/tenant/str-filing/str-filing.component';
 
 export const routes: Routes = [
   {
@@ -23,23 +23,35 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        component: DashboardComponent
+        loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES)
       },
       {
-        path: 'transactions',
-        component: TransactionsComponent
+        path: 'tenantManagement',
+        loadChildren: () => import('./features/systemAdmin/tenant-management/tenant-management.routes').then(m => m.TENANT_MANAGEMENT_ROUTES)
       },
       {
         path: 'alerts',
-        component: AlertsComponent
+        loadChildren: () => import('./features/tenant/alerts/alerts.routes').then(m => m.ALERTS_ROUTES)
+      },
+      {
+        path: 'cases',
+        loadChildren: () => import('./features/tenant/cases/cases.routes').then(m => m.CASES_ROUTES)
       },
       {
         path: 'rules',
-        component: RulesComponent
+        loadChildren: () => import('./features/systemAdmin/rules/rules.routes').then(m => m.RULES_ROUTES)
       },
       {
-        path: 'users',
-        component: UsersComponent
+        path: 'rule-config',
+        loadChildren: () => import('./features/tenant/rule-config-management/rule-config-management.routes').then(m => m.RULE_CONFIG_MANAGEMENT_ROUTES)
+      },
+      {
+        path: 'file-upload',
+        loadChildren: () => import('./features/tenant/file-upload/file-upload.routes').then(m => m.FILE_UPLOAD_ROUTES)
+      },
+      {
+        path: 'str-filing',
+        loadChildren: () => import('./features/tenant/str-filing/str-filing.routes').then(m => m.STR_FILING_ROUTES)
       },
       {
         path: '',
@@ -50,6 +62,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    redirectTo: 'login'
+    loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
 ];

@@ -8,7 +8,7 @@ import { AuthUser, JwtResponse, LoginRequest } from '../models/auth.models';
 })
 export class AuthService {
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = 'http://localhost:8080/api';
+  private readonly apiBaseUrl = 'http://localhost:8080/api/v1';
   private readonly tokenStorageKey = 'aml.auth.jwt';
   private readonly refreshTokenStorageKey = 'aml.auth.refreshToken';
   private readonly tokenPrefixStorageKey = 'aml.auth.prefix';

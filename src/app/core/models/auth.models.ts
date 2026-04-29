@@ -1,4 +1,4 @@
-export type UserRole = 'AML_SYSTEM ADMIN' | 'BANK_ADMIN' | 'COMPLIANCE_OFFICER';
+export type UserRole = 'SYSTEM_ADMIN' | 'BANK_ADMIN' | 'COMPLIANCE_OFFICER';
 
 export interface LoginRequest {
   email: string;
