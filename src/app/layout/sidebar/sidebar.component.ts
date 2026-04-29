@@ -57,6 +57,11 @@ export class SidebarComponent implements OnInit {
       roles: ['BANK_ADMIN']
     },
     {
+      label: 'Users',
+      route: '/tenant-users',
+      roles: ['BANK_ADMIN']
+    },
+    {
       label: 'Rule Config Management',
       route: '/rule-config',
       roles: ['BANK_ADMIN']
