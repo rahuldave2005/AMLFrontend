@@ -1,0 +1,109 @@
+<div class="container-fluid p-4">
+  <div class="row justify-content-center">
+    <div class="col-xl-8 col-lg-10">
+      
+      <!-- Header -->
+      <div class="mb-4">
+        <h2 class="h3 fw-bold text-gray-800">Rule Engine Execution</h2>
+        <p class="text-muted">Trigger the automated AML rule engine to process recent transactions and generate alerts.</p>
+      </div>
+
+      <!-- Execution Card -->
+      <div class="card shadow-sm border-0 mb-4 overflow-hidden">
+        <div class="card-header bg-gradient-primary text-white p-4 text-center position-relative">
+          <div class="gears-container mb-3" [class.spinning]="isExecuting">
+            <i class="bi bi-gear-fill display-1 opacity-25"></i>
+            <i class="bi bi-gear-fill display-4 position-absolute opacity-50" style="top: 20%; left: 55%;"></i>
+          </div>
+          <h3 class="fw-bold mb-0">Engine Dashboard</h3>
+          <p class="opacity-75 small">Ready to process compliance rules</p>
+        </div>
+
+        <div class="card-body p-5 text-center">
+          <div *ngIf="!isExecuting && !executionResult" class="mb-4">
+            <div class="p-4 bg-light rounded-4 mb-4 border">
+              <i class="bi bi-info-circle-fill text-primary display-6 d-block mb-3"></i>
+              <h5 class="fw-bold">Ready for Execution</h5>
+              <p class="text-muted mb-0">
+                Click the button below to start the rule execution.
+              </p>
+            </div>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="isExecuting" class="py-5">
+            <div class="spinner-grow text-primary mb-3" style="width: 3rem; height: 3rem;" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <h4 class="fw-bold text-primary animate-pulse">Execution in Progress</h4>
+            <p class="text-muted">Please wait while the rules are being applied. This may take a few moments...</p>
+          </div>
+
+          <!-- Success State -->
+          <div *ngIf="executionResult" class="py-4 animate__animated animate__fadeIn">
+            <div class="p-4 bg-success-soft rounded-4 mb-4 border border-success">
+              <i class="bi bi-check-circle-fill text-success display-4 d-block mb-3"></i>
+              <h4 class="fw-bold text-success">Execution Complete</h4>
+              <p class="text-dark mb-2">{{ executionResult }}</p>
+              <div class="small text-muted" *ngIf="lastExecutionTime">
+                Last Run: {{ lastExecutionTime | date:'medium' }}
+              </div>
+            </div>
+            <button class="btn btn-outline-primary px-4" (click)="executionResult = null">
+              <i class="bi bi-arrow-repeat me-2"></i> Run Again
+            </button>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="errorMessage" class="py-4 animate__animated animate__shakeX">
+            <div class="p-4 bg-danger-soft rounded-4 mb-4 border border-danger">
+              <i class="bi bi-exclamation-triangle-fill text-danger display-4 d-block mb-3"></i>
+              <h4 class="fw-bold text-danger">Execution Failed</h4>
+              <p class="text-dark">{{ errorMessage }}</p>
+            </div>
+          </div>
+
+          <!-- Action Button -->
+          <button 
+            *ngIf="!isExecuting && !executionResult"
+            class="btn btn-primary btn-lg px-5 py-3 shadow btn-run-engine"
+            [disabled]="isExecuting"
+            (click)="runEngine()"
+          >
+            <i class="bi bi-play-fill me-2"></i>
+            Start Rule Engine
+          </button>
+        </div>
+      </div>
+
+      <!-- Information Section -->
+      <div class="row g-4">
+        <div class="col-md-6">
+          <div class="card h-100 border-0 shadow-sm p-4">
+            <h6 class="fw-bold text-uppercase text-secondary small mb-3">Process Overview</h6>
+            <ul class="list-unstyled mb-0 small">
+              <li class="mb-2 d-flex align-items-start gap-2">
+                <i class="bi bi-dot text-primary fs-4 mt-n2"></i>
+                <span>Validates each transaction against active compliance rules.</span>
+              </li>
+              <li class="d-flex align-items-start gap-2">
+                <i class="bi bi-dot text-primary fs-4 mt-n2"></i>
+                <span>Generates alerts for any suspicious activities detected.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="card h-100 border-0 shadow-sm p-4">
+            <h6 class="fw-bold text-uppercase text-secondary small mb-3">Security & Compliance</h6>
+            <p class="small text-muted mb-0">
+              Only users with the <strong>BANK_ADMIN</strong> role are authorized to run the engine. All executions are 
+              logged for audit purposes in the system logs.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

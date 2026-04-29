@@ -1,1 +1,128 @@
-<p>file-upload works!</p>
+<div class="container-fluid p-4">
+  <div class="upload-container">
+    <!-- Header -->
+    <div class="mb-4">
+      <h2 class="h3 fw-bold text-gray-800">System File Upload</h2>
+      <p class="text-muted">Import system data using CSV files. Select a file type and upload your file below.</p>
+    </div>
+
+    <div class="card upload-card shadow-sm mb-4">
+      <div class="card-body p-4 p-md-5">
+        
+        <!-- Step 1: Select Type -->
+        <h5 class="mb-3 fw-bold text-dark">1. Select File Type</h5>
+        <div class="type-selection mb-4">
+          <div 
+            class="type-card" 
+            [class.selected]="selectedType === fileTypes.CUSTOMERS"
+            (click)="selectedType = fileTypes.CUSTOMERS"
+          >
+            <i class="bi bi-people-fill text-primary"></i>
+            <span class="fw-bold text-dark">Customers</span>
+          </div>
+          <div 
+            class="type-card" 
+            [class.selected]="selectedType === fileTypes.TRANSACTIONS"
+            (click)="selectedType = fileTypes.TRANSACTIONS"
+          >
+            <i class="bi bi-cash-stack text-success"></i>
+            <span class="fw-bold text-dark">Transactions</span>
+          </div>
+          <div 
+            class="type-card" 
+            [class.selected]="selectedType === fileTypes.ACCOUNTS"
+            (click)="selectedType = fileTypes.ACCOUNTS"
+          >
+            <i class="bi bi-credit-card-2-front text-info"></i>
+            <span class="fw-bold text-dark">Accounts</span>
+          </div>
+        </div>
+
+        <!-- Step 2: Upload File -->
+        <h5 class="mb-3 fw-bold text-dark">2. Choose File</h5>
+        <div 
+          class="drop-zone" 
+          [class.active]="isDragging"
+          (dragover)="onDragOver($event)"
+          (dragleave)="onDragLeave()"
+          (drop)="onDrop($event)"
+        >
+          <input 
+            *ngIf="!selectedFile"
+            type="file" 
+            class="file-input" 
+            accept=".csv" 
+            (change)="onFileSelected($event)"
+            #fileInput
+          >
+          <div *ngIf="!selectedFile">
+            <i class="bi bi-cloud-arrow-up display-4"></i>
+            <h5 class="mt-3 fw-bold text-dark">Drag & drop your CSV file here</h5>
+            <p class="text-muted small">or click to browse from your computer</p>
+            <div class="badge bg-light text-secondary border">CSV files only</div>
+          </div>
+          
+          <div *ngIf="selectedFile" class="selected-file-info justify-content-center border-0 bg-transparent">
+            <i class="bi bi-file-earmark-text text-primary display-6"></i>
+            <div class="text-start">
+              <div class="fw-bold text-dark">{{ selectedFile.name }}</div>
+              <div class="text-muted small">{{ (selectedFile.size / 1024).toFixed(2) }} KB</div>
+            </div>
+            <button class="btn btn-sm btn-link text-danger ms-3 fw-bold" (click)="clearSelection($event)">
+              <i class="bi bi-x-circle"></i> Remove
+            </button>
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="mt-4 text-center">
+          <button 
+            class="btn btn-primary btn-upload px-5 shadow-sm text-uppercase fw-bold"
+            [disabled]="!selectedFile || !selectedType || isUploading"
+            (click)="upload()"
+          >
+            <span *ngIf="isUploading" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            {{ isUploading ? 'Processing File...' : 'Start Upload' }}
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Results Section -->
+    <div *ngIf="uploadResult" class="card result-card shadow-lg animate__animated animate__fadeInUp">
+      <div class="card-header bg-gradient-primary text-white p-3">
+        <h5 class="mb-0 fw-bold"><i class="bi bi-info-circle me-2"></i>Upload Result</h5>
+      </div>
+      <div class="card-body p-4">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+          <div>
+            <div class="text-dark small text-uppercase fw-bold mb-1">Status</div>
+            <span 
+              class="status-badge" 
+              [ngClass]="uploadResult.status === 'SUCCESS' ? 'bg-success-soft text-success' : 'bg-danger-soft text-danger'"
+            >
+              {{ uploadResult.status }}
+            </span>
+          </div>
+          <div class="text-end">
+            <div class="text-dark small text-uppercase fw-bold mb-1">Processed Records</div>
+            <h3 class="mb-0 fw-bold text-primary">{{ uploadResult.totalRecords }}</h3>
+          </div>
+        </div>
+        
+        <div class="p-3 bg-light rounded-3 mb-0 border">
+          <div class="fw-bold text-dark mb-1">Response Message:</div>
+          <p class="mb-0 text-dark">{{ uploadResult.message }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Error Alert -->
+    <div *ngIf="errorMessage" class="alert alert-danger mt-4 border-0 shadow-sm d-flex align-items-center gap-2">
+      <i class="bi bi-exclamation-triangle-fill"></i>
+      <div>{{ errorMessage }}</div>
+    </div>
+
+  </div>
+</div>

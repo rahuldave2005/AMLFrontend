@@ -1,0 +1,160 @@
+<div class="container-fluid p-4">
+  <div class="row justify-content-center">
+    <div class="col-xl-8 col-lg-10">
+      <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+        <div class="card-header bg-gradient-primary text-white p-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h3 class="mb-1 fw-bold">Register Compliance Officer</h3>
+              <p class="mb-0 opacity-75">Create a new compliance officer account for your organization.</p>
+            </div>
+            <i class="bi bi-person-badge display-5 opacity-50"></i>
+          </div>
+        </div>
+
+        <div class="card-body p-4 p-md-5">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="needs-validation">
+            <div class="row g-4">
+              <!-- First Name -->
+              <div class="col-md-6">
+                <label for="firstName" class="form-label fw-semibold text-secondary">First Name</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                  <input 
+                    type="text" 
+                    id="firstName" 
+                    formControlName="firstName" 
+                    class="form-control border-start-0 bg-light" 
+                    [class.is-invalid]="f['firstName'].touched && f['firstName'].invalid"
+                    placeholder="Enter first name"
+                  >
+                  <div class="invalid-feedback" *ngIf="f['firstName'].errors?.['required']">
+                    First name is required.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['firstName'].errors?.['maxlength']">
+                    First name cannot exceed 50 characters.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Last Name -->
+              <div class="col-md-6">
+                <label for="lastName" class="form-label fw-semibold text-secondary">Last Name</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                  <input 
+                    type="text" 
+                    id="lastName" 
+                    formControlName="lastName" 
+                    class="form-control border-start-0 bg-light" 
+                    [class.is-invalid]="f['lastName'].touched && f['lastName'].invalid"
+                    placeholder="Enter last name"
+                  >
+                  <div class="invalid-feedback" *ngIf="f['lastName'].errors?.['required']">
+                    Last name is required.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['lastName'].errors?.['maxlength']">
+                    Last name cannot exceed 50 characters.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Middle Name -->
+              <div class="col-md-6">
+                <label for="middleName" class="form-label fw-semibold text-secondary">Middle Name <span class="text-muted small fw-normal">(Optional)</span></label>
+                <div class="input-group">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-person"></i></span>
+                  <input 
+                    type="text" 
+                    id="middleName" 
+                    formControlName="middleName" 
+                    class="form-control border-start-0 bg-light" 
+                    placeholder="Enter middle name"
+                  >
+                </div>
+              </div>
+
+              <!-- Employee Code -->
+              <div class="col-md-6">
+                <label for="employeeCode" class="form-label fw-semibold text-secondary">Employee Code</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-hash"></i></span>
+                  <input 
+                    type="text" 
+                    id="employeeCode" 
+                    formControlName="employeeCode" 
+                    class="form-control border-start-0 bg-light" 
+                    [class.is-invalid]="f['employeeCode'].touched && f['employeeCode'].invalid"
+                    placeholder="e.g. CO-12345"
+                  >
+                  <div class="invalid-feedback" *ngIf="f['employeeCode'].errors?.['required']">
+                    Employee code is required.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['employeeCode'].errors?.['minlength']">
+                    Must be at least 3 characters.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['employeeCode'].errors?.['maxlength']">
+                    Cannot exceed 20 characters.
+                  </div>
+                </div>
+              </div>
+
+              <!-- Email -->
+              <div class="col-12">
+                <label for="email" class="form-label fw-semibold text-secondary">Email Address</label>
+                <div class="input-group has-validation">
+                  <span class="input-group-text bg-light border-end-0"><i class="bi bi-envelope"></i></span>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    formControlName="email" 
+                    class="form-control border-start-0 bg-light" 
+                    [class.is-invalid]="f['email'].touched && f['email'].invalid"
+                    placeholder="example@company.com"
+                  >
+                  <div class="invalid-feedback" *ngIf="f['email'].errors?.['required']">
+                    Email address is required.
+                  </div>
+                  <div class="invalid-feedback" *ngIf="f['email'].errors?.['email']">
+                    Please enter a valid email format.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-5 d-flex gap-3">
+              <button 
+                type="submit" 
+                class="btn btn-primary px-5 py-2 fw-bold shadow-sm d-flex align-items-center gap-2"
+                [disabled]="registerForm.invalid || isSubmitting"
+              >
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                {{ isSubmitting ? 'Registering...' : 'Complete Registration' }}
+              </button>
+              <button 
+                type="button" 
+                class="btn btn-outline-secondary px-4 py-2" 
+                routerLink="../"
+                [disabled]="isSubmitting"
+              >
+                Cancel
+              </button>
+            </div>
+          </form>
+
+          <!-- Success Alert -->
+          <div *ngIf="successMessage" class="alert alert-success mt-4 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+            <i class="bi bi-check-circle-fill"></i>
+            <div>{{ successMessage }}</div>
+          </div>
+          
+          <!-- Error Alert -->
+          <div *ngIf="errorMessage" class="alert alert-danger mt-4 border-0 shadow-sm d-flex align-items-center gap-2" role="alert">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <div>{{ errorMessage }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

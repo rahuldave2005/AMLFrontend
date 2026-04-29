@@ -1,0 +1,42 @@
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+
+.form-control:focus {
+  border-color: #4e73df;
+  box-shadow: 0 0 0 0.25rem rgba(78, 115, 223, 0.1);
+  background-color: #fff !important;
+}
+
+.input-group-text {
+  color: #4e73df;
+}
+
+.btn-primary {
+  background-color: #4e73df;
+  border-color: #4e73df;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #2e59d9;
+  border-color: #2653d4;
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.card {
+  border: none;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.invalid-feedback {
+  font-size: 0.8rem;
+}

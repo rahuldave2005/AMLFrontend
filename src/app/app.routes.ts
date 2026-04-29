@@ -54,9 +54,18 @@ export const routes: Routes = [
         loadChildren: () => import('./features/tenant/str-filing/str-filing.routes').then(m => m.STR_FILING_ROUTES)
       },
       {
-        path: 'tenant-users',
-        loadChildren: ()=>import('./features/tenant/user-management/user-management.routes').then(m => m.USER_MANAGEMENT_ROUTES)
+        path: 'run-rule-engine',
+        loadChildren: () => import('./features/tenant/run-rule-engine/run-rule-engine.routes').then(m => m.RUN_RULE_ENGINE_ROUTES)
       },
+      {
+        path: 'tenant-users',
+        loadChildren: () => import('./features/tenant/user-management/user-management.routes').then(m => m.USER_MANAGEMENT_ROUTES)
+      },
+      {
+        path: 'tenant/user-management',
+        loadChildren: () => import('./features/tenant/user-management/user-management.routes').then(m => m.USER_MANAGEMENT_ROUTES)
+      },
+
       {
         path: '',
         pathMatch: 'full',

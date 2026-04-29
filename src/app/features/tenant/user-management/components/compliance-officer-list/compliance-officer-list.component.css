@@ -1,0 +1,75 @@
+.bg-soft-info {
+  background-color: rgba(13, 202, 240, 0.1);
+}
+
+.table-hover tbody tr:hover {
+  background-color: rgba(78, 115, 223, 0.03);
+  transition: background-color 0.2s ease;
+}
+
+.table {
+  width: 100%;
+  table-layout: auto;
+}
+
+.table th, .table td {
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background-color: #4e73df;
+  border-color: #4e73df;
+}
+
+.btn-primary:hover {
+  background-color: #2e59d9;
+  border-color: #2653d4;
+}
+
+.card {
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.table thead th {
+  border-top: 0;
+  border-bottom: 2px solid #e3e6f0;
+  background-color: #f8f9fc;
+}
+
+.badge {
+  padding: 0.5em 0.75em;
+  font-weight: 500;
+}
+
+/* Modal styles - following the existing pattern found in grep */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+.modal {
+  z-index: 1050;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+
+.modal-body {
+  color: #2e3751 !important;
+}
+
+.modal-body h4 {
+  color: #1a202c !important;
+}
+
+.modal-body label {
+  color: #718096 !important;
+  font-size: 0.75rem;
+}

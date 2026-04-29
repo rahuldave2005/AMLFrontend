@@ -1,0 +1,106 @@
+<div class="container-fluid p-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="h3 mb-0 text-gray-800">Compliance Officers</h2>
+      <p class="text-muted small">Manage and view all registered compliance officers for your tenant.</p>
+    </div>
+    <button (click)='registerOfficer()' class="btn btn-primary d-flex align-items-center gap-2 shadow-sm">
+      <i class="bi bi-person-plus-fill"></i>
+      Register Compliance Officer
+    </button>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-dark small text-uppercase fw-bold">
+            <tr>
+              <th class="px-4 py-3">Employee Code</th>
+              <th class="px-4 py-3">First Name</th>
+              <th class="px-4 py-3">Last Name</th>
+              <th class="px-4 py-3 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="complianceOfficers$ | async as data; else loading">
+              <tr *ngFor="let officer of data.userInlineDtoList">
+                <td class="px-4 py-3">
+                  <span class="badge bg-soft-info text-info fw-bold">
+                    {{ officer.employeeCode }}
+                  </span>
+                </td>
+                <td class="px-4 py-3 fw-bold text-dark">{{ officer.firstName }}</td>
+                <td class="px-4 py-3 fw-bold text-dark">{{ officer.lastName }}</td>
+                <td class="px-4 py-3 text-end">
+                  <button 
+                    (click)="viewDetails(officer.employeeCode)" 
+                    class="btn btn-sm btn-outline-primary d-inline-flex align-items-center gap-1" 
+                    [disabled]="isLoadingDetails"
+                  >
+                    <i class="bi bi-eye"></i>
+                    View Details
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="data.userInlineDtoList.length === 0">
+                <td colspan="4" class="text-center py-5">
+                  <div class="text-muted">
+                    <i class="bi bi-people display-4 d-block mb-3 opacity-25"></i>
+                    No compliance officers found.
+                  </div>
+                </td>
+              </tr>
+            </ng-container>
+            <ng-template #loading>
+              <tr>
+                <td colspan="4" class="text-center py-5">
+                  <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+                  <span class="text-muted">Loading compliance officers...</span>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Officer Details Modal -->
+  <div *ngIf="selectedOfficer" class="modal-backdrop" (click)="closeDetails()"></div>
+  <div *ngIf="selectedOfficer" class="modal fade show d-block" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content border-0 shadow-lg overflow-hidden rounded-3">
+        <div class="modal-header bg-gradient-primary text-white border-0 p-3">
+          <h5 class="modal-title fw-bold">Officer Profile</h5>
+          <button type="button" class="btn-close btn-close-white" (click)="closeDetails()" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4 bg-white">
+          <div class="text-center mb-4">
+            <div class="avatar-circle mx-auto mb-3 bg-light text-primary d-flex align-items-center justify-content-center border" style="width: 80px; height: 80px; border-radius: 50%; font-size: 2rem; font-weight: bold;">
+              {{ selectedOfficer.firstName[0] }}{{ selectedOfficer.lastName[0] }}
+            </div>
+            <h4 class="mb-1 fw-bold text-dark">{{ selectedOfficer.firstName }} {{ selectedOfficer.middleName ? selectedOfficer.middleName + ' ' : '' }}{{ selectedOfficer.lastName }}</h4>
+            <p class="text-secondary fw-medium mb-0 text-dark">{{ selectedOfficer.email }}</p>
+          </div>
+          
+          <hr class="my-4 opacity-25">
+
+          <div class="row g-4">
+            <div class="col-6">
+              <label class="text-uppercase small fw-bold text-muted mb-1 d-block">Employee Code</label>
+              <span class="fs-5 fw-bold text-dark">{{ selectedOfficer.employeeCode }}</span>
+            </div>
+            <div class="col-6">
+              <label class="text-uppercase small fw-bold text-muted mb-1 d-block">Created At</label>
+              <span class="fs-5 fw-bold text-dark">{{ selectedOfficer.createdAt }}</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer bg-light border-0 p-3">
+          <button type="button" class="btn btn-secondary px-4 fw-bold" (click)="closeDetails()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

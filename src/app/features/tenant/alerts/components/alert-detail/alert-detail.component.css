@@ -1,0 +1,24 @@
+.bg-info-soft { background-color: rgba(13, 202, 240, 0.1); }
+
+.breadcrumb-item a {
+  text-decoration: none;
+  color: #4e73df;
+  font-weight: 500;
+}
+
+.card {
+  border-radius: 0.75rem;
+}
+
+.table th {
+  border-top: 0;
+}
+
+.badge {
+  padding: 0.5em 0.8em;
+  font-weight: 600;
+}
+
+.h4 {
+  letter-spacing: -0.5px;
+}

@@ -1,0 +1,147 @@
+.upload-container {
+  max-width: 800px;
+  margin: 2rem auto;
+}
+
+.upload-card {
+  border-radius: 1rem;
+  border: none;
+  background: #ffffff;
+}
+
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #4e73df 0%, #224abe 100%);
+}
+
+.drop-zone {
+  border: 2px dashed #d1d3e2;
+  border-radius: 1rem;
+  padding: 3rem 2rem;
+  text-align: center;
+  transition: all 0.3s ease;
+  background-color: #f8f9fc;
+  cursor: pointer;
+  position: relative;
+}
+
+.drop-zone:hover, .drop-zone.active {
+  border-color: #4e73df;
+  background-color: rgba(78, 115, 223, 0.05);
+}
+
+.drop-zone i {
+  color: #4e73df;
+  margin-bottom: 1rem;
+}
+
+.file-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.type-selection {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.type-card {
+  border: 1px solid #e3e6f0;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.type-card span {
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.type-card:hover {
+  border-color: #4e73df;
+  background-color: #f8f9fc;
+  transform: translateY(-2px);
+}
+
+.type-card.selected {
+  border-color: #4e73df;
+  background-color: rgba(78, 115, 223, 0.1);
+  box-shadow: 0 4px 12px rgba(78, 115, 223, 0.15);
+}
+
+.type-card i {
+  font-size: 1.5rem;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.btn-upload {
+  background-color: #4e73df;
+  border: none;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-upload:hover:not(:disabled) {
+  background-color: #2e59d9;
+  transform: translateY(-1px);
+}
+
+.selected-file-info {
+  background-color: #f8f9fc;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.result-card {
+  border-radius: 1rem;
+  border: none;
+  background: #ffffff;
+}
+
+.status-badge {
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+.bg-success-soft {
+  background-color: rgba(25, 135, 84, 0.1);
+}
+
+.bg-danger-soft {
+  background-color: rgba(220, 53, 69, 0.1);
+}
+
+.animate__animated {
+  animation-duration: 0.5s;
+}
+
+.animate__fadeInUp {
+  animation-name: fadeInUp;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 20px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
