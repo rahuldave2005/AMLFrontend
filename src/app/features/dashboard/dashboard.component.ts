@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -9,8 +9,12 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private readonly authService = inject(AuthService);
 
   readonly currentUser$ = this.authService.currentUser$;
+
+  ngOnInit(): void {
+    // Component initialized
+  }
 }

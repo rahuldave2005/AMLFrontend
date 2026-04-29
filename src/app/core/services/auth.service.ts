@@ -9,14 +9,22 @@ import { AuthUser, JwtResponse, LoginRequest } from '../models/auth.models';
 export class AuthService {
   private readonly http = inject(HttpClient);
   private readonly apiBaseUrl = 'http://localhost:8080/api/v1';
-  private readonly tokenStorageKey = 'aml.auth.jwt';
-  private readonly refreshTokenStorageKey = 'aml.auth.refreshToken';
-  private readonly tokenPrefixStorageKey = 'aml.auth.prefix';
-  private readonly emailStorageKey = 'aml.auth.email';
-  private readonly bankNameStorageKey = 'aml.auth.bankName';
-  private readonly currentUserSubject = new BehaviorSubject<AuthUser | null>(this.restoreSession());
+  
+  private readonly STORAGE_KEYS = {
+    TOKEN: 'aml.auth.jwt',
+    REFRESH_TOKEN: 'aml.auth.refreshToken',
+    PREFIX: 'aml.auth.prefix',
+    EMAIL: 'aml.auth.email',
+    BANK_NAME: 'aml.auth.bankName',
+    ROLES: 'aml.auth.roles'
+  };
 
+  private readonly currentUserSubject = new BehaviorSubject<AuthUser | null>(null);
   readonly currentUser$ = this.currentUserSubject.asObservable();
+
+  constructor() {
+    this.rehydrate();
+  }
 
   login(payload: LoginRequest): Observable<JwtResponse> {
     return this.http
@@ -29,72 +37,91 @@ export class AuthService {
   }
 
   getToken(): string | null {
-    return localStorage.getItem(this.tokenStorageKey);
+    return localStorage.getItem(this.STORAGE_KEYS.TOKEN);
+  }
+
+  getTokenPrefix(): string {
+    return localStorage.getItem(this.STORAGE_KEYS.PREFIX) ?? 'Bearer';
   }
 
   logout(): void {
-    localStorage.removeItem(this.tokenStorageKey);
-    localStorage.removeItem(this.refreshTokenStorageKey);
-    localStorage.removeItem(this.tokenPrefixStorageKey);
-    localStorage.removeItem(this.emailStorageKey);
-    localStorage.removeItem(this.bankNameStorageKey);
+    Object.values(this.STORAGE_KEYS).forEach(key => localStorage.removeItem(key));
     this.currentUserSubject.next(null);
   }
 
+  rehydrate(): void {
+    const session = this.restoreSession();
+    if (session) {
+      this.currentUserSubject.next(session);
+    }
+  }
+
   private persistSession(response: JwtResponse): void {
-    localStorage.setItem(this.tokenStorageKey, response.jwt);
-    localStorage.setItem(this.refreshTokenStorageKey, response.refreshToken);
-    localStorage.setItem(this.tokenPrefixStorageKey, response.prefix);
-    localStorage.setItem(this.emailStorageKey, response.email);
-    localStorage.setItem(this.bankNameStorageKey, response.bankName);
-    this.currentUserSubject.next(this.mapResponseToUser(response));
+    localStorage.setItem(this.STORAGE_KEYS.TOKEN, response.jwt || '');
+    localStorage.setItem(this.STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken || '');
+    localStorage.setItem(this.STORAGE_KEYS.PREFIX, response.prefix || 'Bearer');
+    localStorage.setItem(this.STORAGE_KEYS.EMAIL, response.email || '');
+    localStorage.setItem(this.STORAGE_KEYS.BANK_NAME, response.bankName || '');
+    
+    const user = this.mapResponseToUser(response);
+    localStorage.setItem(this.STORAGE_KEYS.ROLES, JSON.stringify(user.roles));
+    
+    this.currentUserSubject.next(user);
   }
 
   private restoreSession(): AuthUser | null {
-    const jwt = localStorage.getItem(this.tokenStorageKey);
-    const email = localStorage.getItem(this.emailStorageKey);
-    const bankName = localStorage.getItem(this.bankNameStorageKey);
+    const jwt = localStorage.getItem(this.STORAGE_KEYS.TOKEN);
+    const email = localStorage.getItem(this.STORAGE_KEYS.EMAIL);
+    const bankName = localStorage.getItem(this.STORAGE_KEYS.BANK_NAME);
+    const storedRoles = localStorage.getItem(this.STORAGE_KEYS.ROLES);
 
-    if (!jwt || !email || !bankName) {
+    if (!jwt || !email) {
       return null;
+    }
+
+    let roles: string[] = [];
+    try {
+      roles = storedRoles ? JSON.parse(storedRoles) : [];
+    } catch {
+      roles = [];
     }
 
     return this.mapResponseToUser({
       jwt,
-      prefix: localStorage.getItem(this.tokenPrefixStorageKey) ?? 'Bearer',
-      refreshToken: localStorage.getItem(this.refreshTokenStorageKey) ?? '',
+      prefix: localStorage.getItem(this.STORAGE_KEYS.PREFIX) ?? 'Bearer',
+      refreshToken: localStorage.getItem(this.STORAGE_KEYS.REFRESH_TOKEN) ?? '',
       email,
-      bankName,
-      roles: []
+      bankName: bankName ?? 'Unknown Bank',
+      roles: roles
     });
   }
 
   private mapResponseToUser(response: JwtResponse): AuthUser {
-    const roles = this.extractRolesFromJwt(response.jwt, response.roles);
+    // 1. If explicit roles are provided, use them
+    // 2. If not, try to extract from JWT
+    // 3. Fallback to empty
+    let roles = response.roles && response.roles.length > 0 
+      ? response.roles 
+      : this.extractRolesFromJwt(response.jwt, []);
 
     return {
-      email: response.email,
-      bankName: response.bankName,
+      email: response.email || 'user@example.com',
+      bankName: response.bankName || 'Unknown Bank',
       roles,
       primaryRole: roles[0] ?? 'USER',
-      initials: this.buildInitials(response.email)
+      initials: this.buildInitials(response.email || 'U')
     };
   }
 
   private extractRolesFromJwt(jwt: string, fallbackRoles: string[]): string[] {
+    if (!jwt) return fallbackRoles;
     try {
-      const payload = jwt.split('.')[1];
-
-      if (!payload) {
-        return fallbackRoles;
-      }
-
+      const parts = jwt.split('.');
+      if (parts.length !== 3) return fallbackRoles;
+      
+      const payload = parts[1];
       const normalizedPayload = payload.replace(/-/g, '+').replace(/_/g, '/');
-      const decodedPayload = JSON.parse(atob(normalizedPayload)) as {
-        roles?: string[];
-        authorities?: string[];
-        role?: string | string[];
-      };
+      const decodedPayload = JSON.parse(atob(normalizedPayload));
 
       const rolesClaim = decodedPayload.roles ?? decodedPayload.authorities ?? decodedPayload.role;
 
@@ -113,6 +140,7 @@ export class AuthService {
   }
 
   private buildInitials(email: string): string {
+    if (!email || !email.includes('@')) return 'U';
     const [localPart] = email.split('@');
     return localPart.slice(0, 2).toUpperCase();
   }

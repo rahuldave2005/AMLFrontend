@@ -1,0 +1,116 @@
+<div class="container-fluid p-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Breadcrumb / Header -->
+      <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb mb-1">
+          <li class="breadcrumb-item"><a routerLink="/tenantManagement" class="text-decoration-none">Tenant Management</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Register New Tenant</li>
+        </ol>
+        <h2 class="fw-bold text-dark">Onboard New Institution</h2>
+      </nav>
+
+      <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-header bg-primary text-white p-4 border-0">
+          <h5 class="mb-1 fw-bold">Registration Form</h5>
+          <p class="mb-0 opacity-75 small">Fill in the details to initialize the multi-tenant environment for the new bank.</p>
+        </div>
+
+        <div class="card-body p-4 p-lg-5">
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            
+            <!-- Messages -->
+            <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-4 border-0 shadow-sm">
+              <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+              <div>{{ successMessage }}</div>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-4 border-0 shadow-sm">
+              <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+              <div>{{ errorMessage }}</div>
+            </div>
+
+            <!-- Section 1: Bank Information -->
+            <div class="form-section mb-5">
+              <div class="section-badge mb-3">
+                <span class="badge rounded-pill bg-primary-subtle text-primary px-3 py-2">1. Bank Information</span>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-8">
+                  <label for="bankName" class="form-label fw-semibold small text-uppercase">Bank Name</label>
+                  <input type="text" id="bankName" formControlName="bankName" class="form-control form-control-lg border-2 shadow-none" 
+                         placeholder="Enter institution full name" [class.is-invalid]="registerForm.get('bankName')?.touched && registerForm.get('bankName')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('bankName', 'required')">Bank name is required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="ifsc" class="form-label fw-semibold small text-uppercase">IFSC Code</label>
+                  <input type="text" id="ifsc" formControlName="ifsc" class="form-control form-control-lg border-2 shadow-none text-uppercase font-monospace" 
+                         placeholder="ABCD0123456" [class.is-invalid]="registerForm.get('ifsc')?.touched && registerForm.get('ifsc')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('ifsc', 'required')">IFSC code is required.</div>
+                  <div class="invalid-feedback" *ngIf="hasError('ifsc', 'pattern')">Invalid format (e.g., ABCD0123456).</div>
+                </div>
+                <div class="col-12">
+                  <label for="contactEmail" class="form-label fw-semibold small text-uppercase">Contact Email</label>
+                  <input type="email" id="contactEmail" formControlName="contactEmail" class="form-control form-control-lg border-2 shadow-none" 
+                         placeholder="institution@bank.com" [class.is-invalid]="registerForm.get('contactEmail')?.touched && registerForm.get('contactEmail')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('contactEmail', 'required')">Contact email is required.</div>
+                  <div class="invalid-feedback" *ngIf="hasError('contactEmail', 'email')">Invalid email format.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 2: Administrator Information -->
+            <div class="form-section mb-5">
+              <div class="section-badge mb-3">
+                <span class="badge rounded-pill bg-info-subtle text-info px-3 py-2">2. System Administrator Details</span>
+              </div>
+              <div class="row g-4">
+                <div class="col-md-4">
+                  <label for="firstName" class="form-label fw-semibold small text-uppercase">First Name</label>
+                  <input type="text" id="firstName" formControlName="firstName" class="form-control border-2 shadow-none" 
+                         placeholder="First name" [class.is-invalid]="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('firstName', 'required')">Required.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="middleName" class="form-label fw-semibold small text-uppercase">Middle Name</label>
+                  <input type="text" id="middleName" formControlName="middleName" class="form-control border-2 shadow-none" 
+                         placeholder="Optional">
+                </div>
+                <div class="col-md-4">
+                  <label for="lastName" class="form-label fw-semibold small text-uppercase">Last Name</label>
+                  <input type="text" id="lastName" formControlName="lastName" class="form-control border-2 shadow-none" 
+                         placeholder="Last name" [class.is-invalid]="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">Required.</div>
+                </div>
+                <div class="col-md-8">
+                  <label for="bankAdminEmail" class="form-label fw-semibold small text-uppercase">Admin Email</label>
+                  <input type="email" id="bankAdminEmail" formControlName="bankAdminEmail" class="form-control border-2 shadow-none" 
+                         placeholder="admin@bank.com" [class.is-invalid]="registerForm.get('bankAdminEmail')?.touched && registerForm.get('bankAdminEmail')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('bankAdminEmail', 'required')">Admin email is required.</div>
+                  <div class="invalid-feedback" *ngIf="hasError('bankAdminEmail', 'email')">Invalid email format.</div>
+                </div>
+                <div class="col-md-4">
+                  <label for="employeeCode" class="form-label fw-semibold small text-uppercase">Employee Code</label>
+                  <input type="text" id="employeeCode" formControlName="employeeCode" class="form-control border-2 shadow-none text-uppercase" 
+                         placeholder="EMP-001" [class.is-invalid]="registerForm.get('employeeCode')?.touched && registerForm.get('employeeCode')?.invalid">
+                  <div class="invalid-feedback" *ngIf="hasError('employeeCode', 'required')">Required.</div>
+                  <div class="invalid-feedback" *ngIf="hasError('employeeCode', 'pattern')">Must be alphanumeric (3-20 chars).</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Submit Buttons -->
+            <div class="d-flex justify-content-between align-items-center pt-4 border-top">
+              <button type="button" routerLink="/tenantManagement" class="btn btn-link text-decoration-none text-muted fw-semibold">
+                Cancel Registration
+              </button>
+              <button type="submit" [disabled]="isSubmitting" class="btn btn-primary btn-lg px-5 shadow-sm d-flex align-items-center gap-2">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>{{ isSubmitting ? 'Registering...' : 'Register Tenant' }}</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

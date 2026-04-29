@@ -1,0 +1,74 @@
+<div class="container-fluid py-4">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-lg overflow-hidden">
+        <div class="card-header bg-primary text-white p-4">
+          <h2 class="h4 mb-0 fw-bold">Assign Rules to Tenant</h2>
+          <p class="mb-0 opacity-75 small">Configure active monitoring rules for specific bank schemas.</p>
+        </div>
+        
+        <div class="card-body p-4">
+          <!-- Status Messages -->
+          <div *ngIf="message" class="alert mb-4 animate__animated animate__fadeIn" 
+               [ngClass]="isError ? 'alert-danger' : 'alert-success'">
+            {{ message }}
+          </div>
+
+          <div *ngIf="isLoading" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading data...</span>
+            </div>
+            <p class="mt-2 text-muted">Fetching tenants and rules...</p>
+          </div>
+
+          <form *ngIf="!isLoading" (ngSubmit)="onAssign()">
+            <!-- Tenant Selection -->
+            <div class="mb-4">
+              <label for="tenantSelect" class="form-label fw-bold">1. Select Tenant</label>
+              <select id="tenantSelect" class="form-select form-select-lg shadow-sm" 
+                      [(ngModel)]="selectedBankName" name="selectedBankName" required>
+                <option value="" disabled selected>Choose a bank...</option>
+                <option *ngFor="let tenant of tenants" [value]="tenant.bankName">
+                  {{ tenant.bankName }} ({{ tenant.ifsc }})
+                </option>
+              </select>
+            </div>
+
+            <!-- Rules Selection -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">2. Select Monitoring Rules</label>
+              <div class="rules-container border rounded p-3 bg-light">
+                <div class="row g-3">
+                  <div class="col-md-6" *ngFor="let rule of rules">
+                    <div class="rule-card border rounded p-3 bg-white shadow-sm transition-all h-100"
+                         [ngClass]="{'border-primary bg-primary-subtle': selectedRuleCodes.has(rule.ruleCode)}"
+                         (click)="toggleRule(rule.ruleCode)">
+                      <div class="form-check">
+                        <input class="form-check-input" type="checkbox" 
+                               [checked]="selectedRuleCodes.has(rule.ruleCode)"
+                               (change)="toggleRule(rule.ruleCode)"
+                               [id]="'rule-' + rule.ruleCode">
+                        <label class="form-check-label fw-semibold cursor-pointer" [for]="'rule-' + rule.ruleCode">
+                          {{ rule.ruleName }}
+                        </label>
+                        <div class="small text-muted mt-1">{{ rule.severity }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="d-grid mt-5">
+              <button type="submit" class="btn btn-primary btn-lg shadow rounded-pill py-3 fw-bold"
+                      [disabled]="isSubmitting || !selectedBankName || selectedRuleCodes.size === 0">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+                {{ isSubmitting ? 'Assigning Rules...' : 'Confirm Rule Assignment' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

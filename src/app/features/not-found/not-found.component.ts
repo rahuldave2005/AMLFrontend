@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-not-found',
@@ -8,5 +10,15 @@ import { Component } from '@angular/core';
   styleUrl: './not-found.component.css'
 })
 export class NotFoundComponent {
+  private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  goToLogin(): void {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 }

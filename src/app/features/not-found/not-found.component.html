@@ -6,10 +6,13 @@
       The page you are looking for doesn’t exist or has been moved.
     </p>
 
-    <div class="actions">
-      <a routerLink="/login" class="btn btn-outline-secondary">
-        Back to Login
-      </a>
+    <div class="actions d-flex gap-3 justify-content-center">
+      <button (click)="goToDashboard()" class="btn btn-primary px-4 py-2">
+        Go to Dashboard
+      </button>
+      <button (click)="goToLogin()" class="btn btn-outline-danger px-4 py-2">
+        Go to Login
+      </button>
     </div>
   </div>
 </div>

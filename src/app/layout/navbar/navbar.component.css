@@ -14,4 +14,10 @@
   background-color: #dbeafe;
   color: var(--bs-primary);
   border: 1px solid #bfdbfe;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-icon:hover {
+  background-color: #bfdbfe;
 }

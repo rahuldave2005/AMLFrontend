@@ -1,1 +1,42 @@
-<p>tenant-management works!</p>
+<div class="container-fluid p-4">
+  <!-- Header Section -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold text-dark mb-1">Tenant Management</h2>
+      <p class="text-muted small mb-0">Monitor and manage institutional banking partners</p>
+    </div>
+    <button (click)="onRegisterTenant()" class="btn btn-primary d-flex align-items-center gap-2 px-4 shadow-sm py-2">
+      <i class="bi bi-plus-lg fs-5"></i>
+      <span class="fw-semibold">Register New Tenant</span>
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="card border-0 shadow-sm overflow-hidden">
+    <div class="card-header bg-white border-0 py-3">
+      <h5 class="mb-0 fw-semibold text-muted d-flex align-items-center">
+        <i class="bi bi-list-ul me-2"></i>
+        System Tenants
+      </h5>
+    </div>
+    
+    <app-tenant-list 
+      [tenants]="tenants" 
+      (onViewDetails)="viewTenantDetails($event)">
+    </app-tenant-list>
+    
+    <div *ngIf="isLoading" class="p-5 text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2 text-muted small">Synchronizing tenant data...</p>
+    </div>
+  </div>
+
+  <!-- Modal Overlay -->
+  <app-tenant-details 
+    *ngIf="showDetails"
+    [details]="selectedTenantDetails" 
+    (onClose)="closeDetails()">
+  </app-tenant-details>
+</div>

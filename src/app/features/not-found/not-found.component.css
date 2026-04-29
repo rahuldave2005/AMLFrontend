@@ -33,9 +33,7 @@
 }
 
 .actions {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
+  margin-top: 25px;
 }
 
 .btn {

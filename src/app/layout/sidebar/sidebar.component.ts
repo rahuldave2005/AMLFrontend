@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthUser } from '../../core/models/auth.models';
 import { SidebarMenuItem } from '../../core/models/navigation.models';
@@ -12,10 +12,14 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   private readonly authService = inject(AuthService);
 
   readonly currentUser$ = this.authService.currentUser$;
+
+  ngOnInit(): void {
+    this.authService.rehydrate();
+  }
   readonly menuItems: SidebarMenuItem[] = [
     {
       label: 'Dashboard',
@@ -30,6 +34,11 @@ export class SidebarComponent {
     {
       label: 'View Rules',
       route: '/rules',
+      roles: ['SYSTEM_ADMIN']
+    },
+    {
+      label: 'Assign Rules',
+      route: '/rules/assign-rules',
       roles: ['SYSTEM_ADMIN']
     },
     {

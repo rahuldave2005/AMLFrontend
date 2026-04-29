@@ -1,0 +1,59 @@
+<div class="container-fluid py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h3 mb-1 fw-bold text-gradient">Rule Master</h1>
+      <p class="text-muted">Manage and monitor anti-money laundering detection rules.</p>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center py-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && rules.length === 0" class="text-center py-5">
+    <div class="mb-3">
+      <i class="bi bi-shield-slash display-1 text-muted"></i>
+    </div>
+    <h3 class="h5 text-muted">No rules found</h3>
+    <p class="text-muted small">Start by creating a new rule to monitor system activity.</p>
+  </div>
+
+  <div *ngIf="!isLoading && rules.length > 0" class="row g-4">
+    <div class="col-md-6 col-lg-4" *ngFor="let rule of rules">
+      <div class="card h-100 border-0 shadow-sm hover-lift transition-all">
+        <div class="card-body p-4">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="badge rounded-pill px-3 py-2" [ngClass]="getSeverityClass(rule.severity)">
+              {{ rule.severity }}
+            </div>
+            <div class="dropdown">
+              <button class="btn btn-link text-muted p-0" type="button" data-bs-toggle="dropdown">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                <li><a class="dropdown-item" [routerLink]="[rule.ruleCode]">View Details</a></li>
+                <li><a class="dropdown-item" href="#">Edit Rule</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+              </ul>
+            </div>
+          </div>
+          
+          <h5 class="card-title fw-bold mb-2">{{ rule.ruleName }}</h5>
+          <p class="card-text text-muted small mb-4">
+            Customizable logic to detect suspicious patterns in transactions.
+          </p>
+
+          <div class="mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+            <span class="text-muted small"><i class="bi bi-clock me-1"></i> Updated 2d ago</span>
+            <button class="btn btn-sm btn-outline-primary rounded-pill px-3" [routerLink]="[rule.ruleCode]">
+              View Details
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

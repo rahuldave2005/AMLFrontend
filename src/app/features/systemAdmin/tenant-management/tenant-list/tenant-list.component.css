@@ -1,0 +1,27 @@
+.table thead th {
+  border-top: none;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  background-color: #f8f9fa;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.02);
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.transition-btn {
+  transition: all 0.2s ease;
+}
+
+.transition-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
+}

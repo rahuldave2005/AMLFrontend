@@ -1,0 +1,58 @@
+.card {
+  border-radius: 1.5rem;
+}
+
+.card-header {
+  background: linear-gradient(135deg, #4e4376 0%, #2b5876 100%);
+}
+
+.rules-container {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.rule-card {
+  cursor: pointer;
+  border-width: 2px;
+}
+
+.rule-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+}
+
+.bg-primary-subtle {
+  background-color: #e7f1ff !important;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.transition-all {
+  transition: all 0.2s ease;
+}
+
+.btn-primary {
+  background: linear-gradient(90deg, #4e4376 0%, #2b5876 100%);
+  border: none;
+}
+
+.btn-primary:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.01);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.animate__fadeIn {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
