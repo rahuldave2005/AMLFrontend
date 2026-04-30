@@ -2,6 +2,7 @@ export interface TenantUserInlineDto {
   employeeCode: string;
   firstName: string;
   lastName: string;
+  email: string;
 }
 
 export interface TenantUserDashboardDto {

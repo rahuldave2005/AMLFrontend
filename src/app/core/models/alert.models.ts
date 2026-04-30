@@ -6,16 +6,6 @@ export enum AlertStatus {
   CONVERTED_TO_CASE = 'CONVERTED_TO_CASE'
 }
 
-export enum CaseStatus {
-  OPEN = 'OPEN',
-  PENDING_REVIEW = 'PENDING_REVIEW',
-  UNDER_INVESTIGATION = 'UNDER_INVESTIGATION',
-  ON_HOLD = 'ON_HOLD',
-  ESCALATED = 'ESCALATED',
-  REPORTED_TO_FIU = 'REPORTED_TO_FIU',
-  CLOSED_AS_FALSE_POSITIVE = 'CLOSED_AS_FALSE_POSITIVE',
-  CLOSED = 'CLOSED'
-}
 
 export enum TransactionType {
   DEBIT = 'DEBIT',
@@ -56,9 +46,7 @@ export interface AlertDetailDto {
   brokenRuleName: string;
   severity: Severity;
   status: AlertStatus;
-  caseReferenceNumber?: string;
-  caseStatus?: CaseStatus;
-  assignedTo?: string;
+  clientNumber: string;
   transactionCount: number;
   totalAmount: number;
   transactions: AlertTransactionDto[];

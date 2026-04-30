@@ -8,7 +8,7 @@ import { AlertDashboardDto, AlertDetailDto } from '../models/alert.models';
 })
 export class AlertService {
   private readonly http = inject(HttpClient);
-  private readonly apiBaseUrl = 'http://localhost:8080/api/alerts';
+  private readonly apiBaseUrl = 'http://localhost:8080/api/v1/alerts';
 
   getAlertDashboard(): Observable<AlertDashboardDto> {
     return this.http.get<AlertDashboardDto>(this.apiBaseUrl);

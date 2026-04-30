@@ -43,23 +43,5 @@ export class AlertDetailComponent implements OnInit {
     }
   }
 
-  getCaseStatusClass(status: string): string {
-    switch (status?.toUpperCase()) {
-      case 'OPEN':
-      case 'PENDING_REVIEW':
-        return 'bg-primary-soft text-primary';
-      case 'UNDER_INVESTIGATION':
-      case 'ESCALATED':
-        return 'bg-warning-soft text-warning';
-      case 'ON_HOLD':
-        return 'bg-secondary-soft text-secondary';
-      case 'REPORTED_TO_FIU':
-      case 'CLOSED':
-        return 'bg-success-soft text-success';
-      case 'CLOSED_AS_FALSE_POSITIVE':
-        return 'bg-light text-dark border';
-      default:
-        return 'bg-light text-dark';
-    }
-  }
+
 }

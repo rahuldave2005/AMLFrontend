@@ -48,33 +48,26 @@
         </div>
       </div>
 
-      <!-- Case Info -->
+      <!-- Client Info -->
       <div class="col-xl-4 col-md-6">
         <div class="card shadow-sm border-0 h-100">
           <div class="card-body">
-            <h6 class="text-muted small text-uppercase fw-bold mb-3">Case Information</h6>
-            <div *ngIf="alert.caseReferenceNumber; else noCase">
-              <div class="mb-3">
-                <label class="text-muted small d-block">Reference Number</label>
-                <span class="fw-bold text-dark">{{ alert.caseReferenceNumber }}</span>
-              </div>
-              <div class="row">
-                <div class="col-6">
-                  <label class="text-muted small d-block">Case Status</label>
-                  <span class="badge" [ngClass]="getCaseStatusClass(alert.caseStatus!)">{{ alert.caseStatus }}</span>
+            <h6 class="text-muted small text-uppercase fw-bold mb-3">Client Information</h6>
+            <div class="mb-3">
+              <label class="text-muted small d-block">Client Number</label>
+              <span class="fw-bold text-dark h5 mb-0">{{ alert.clientNumber }}</span>
+            </div>
+            <div class="p-3 bg-light rounded-3 border-start border-4 border-primary">
+              <div class="d-flex align-items-center">
+                <div class="flex-shrink-0">
+                  <i class="bi bi-person-badge text-primary fs-3"></i>
                 </div>
-                <div class="col-6">
-                  <label class="text-muted small d-block">Assigned To</label>
-                  <span class="text-dark fw-medium">{{ alert.assignedTo || 'Unassigned' }}</span>
+                <div class="ms-3">
+                  <div class="text-muted small">Associated Client</div>
+                  <div class="fw-medium">Account Holder</div>
                 </div>
               </div>
             </div>
-            <ng-template #noCase>
-              <div class="text-center py-4">
-                <i class="bi bi-folder-plus display-6 text-muted opacity-25"></i>
-                <p class="text-muted small mt-2">No case associated with this alert yet.</p>
-              </div>
-            </ng-template>
           </div>
         </div>
       </div>
