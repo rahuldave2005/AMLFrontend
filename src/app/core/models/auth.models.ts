@@ -21,3 +21,8 @@ export interface AuthUser {
   primaryRole: string;
   initials: string;
 }
+export interface PasswordChangeRequestDto {
+  email: string;
+  oldPassword: string;
+  newPassword: string;
+}

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { AuthUser, JwtResponse, LoginRequest } from '../models/auth.models';
+import { AuthUser, JwtResponse, LoginRequest, PasswordChangeRequestDto } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +22,10 @@ export class AuthService {
   private readonly currentUserSubject = new BehaviorSubject<AuthUser | null>(null);
   readonly currentUser$ = this.currentUserSubject.asObservable();
 
+  // For token refresh synchronization
+  private isRefreshing = false;
+  private refreshTokenSubject = new BehaviorSubject<string | null>(null);
+
   constructor() {
     this.rehydrate();
   }
@@ -30,6 +34,10 @@ export class AuthService {
     return this.http
       .post<JwtResponse>(`${this.apiBaseUrl}/auth/login`, payload)
       .pipe(tap((response) => this.persistSession(response)));
+  }
+
+  updatePassword(payload: PasswordChangeRequestDto): Observable<string> {
+    return this.http.post(`${this.apiBaseUrl}/auth/update-password`, payload, { responseType: 'text' });
   }
 
   getCurrentUser(): AuthUser | null {
@@ -42,6 +50,16 @@ export class AuthService {
 
   getTokenPrefix(): string {
     return localStorage.getItem(this.STORAGE_KEYS.PREFIX) ?? 'Bearer';
+  }
+
+  refreshToken(token: string): Observable<JwtResponse> {
+    return this.http
+      .post<JwtResponse>(`${this.apiBaseUrl}/auth/refreshtoken`, { refreshToken: token })
+      .pipe(tap((response) => this.persistSession(response)));
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.STORAGE_KEYS.REFRESH_TOKEN);
   }
 
   logout(): void {
