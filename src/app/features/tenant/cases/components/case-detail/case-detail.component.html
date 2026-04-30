@@ -12,7 +12,18 @@
         </nav>
         <h2 class="h3 fw-bold text-gray-800 mb-0">Case Investigation</h2>
       </div>
-      <div class="d-flex gap-2">
+      <div class="d-flex gap-2" *ngIf="isCaseActionable(caseData.caseStatus)">
+        <button class="btn btn-outline-danger fw-bold" (click)="openActionModal('escalate')">
+          <i class="bi bi-file-earmark-pdf me-1"></i> Escalate Case
+        </button>
+        <button class="btn btn-outline-success fw-bold" (click)="openActionModal('dismiss')">
+          <i class="bi bi-x-circle me-1"></i> Dismiss Case
+        </button>
+        <button class="btn btn-outline-secondary fw-bold" routerLink="/cases">
+          <i class="bi bi-arrow-left me-1"></i> Back to List
+        </button>
+      </div>
+      <div class="d-flex gap-2" *ngIf="!isCaseActionable(caseData.caseStatus)">
         <button class="btn btn-outline-secondary fw-bold" routerLink="/cases">
           <i class="bi bi-arrow-left me-1"></i> Back to List
         </button>
@@ -105,6 +116,57 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Modal -->
+    <div *ngIf="showActionModal" class="modal-backdrop fade show"></div>
+    <div *ngIf="showActionModal" class="modal fade show d-block" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header" [ngClass]="currentAction === 'escalate' ? 'bg-danger text-white' : 'bg-success text-white'">
+            <h5 class="modal-title fw-bold">
+              {{ currentAction === 'escalate' ? 'Escalate to STR' : 'Dismiss Case' }}
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeActionModal()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div class="mb-3">
+              <label class="form-label fw-bold text-dark small text-uppercase">Case Reference</label>
+              <input type="text" class="form-control bg-light border-0" [value]="caseData.caseReferenceNumber" readonly>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold text-dark small text-uppercase">Investigation Notes <span class="text-danger">*</span></label>
+              <textarea 
+                class="form-control border-2" 
+                rows="4" 
+                placeholder="Enter your investigation notes here..."
+                [(ngModel)]="actionNotes"
+                required
+              ></textarea>
+              <div *ngIf="currentAction === 'dismiss' && !actionNotes.trim()" class="text-danger small mt-1">
+                Notes are compulsory for dismissing a case.
+              </div>
+            </div>
+            <div *ngIf="currentAction === 'escalate'" class="alert alert-warning border-0 small d-flex gap-2">
+              <i class="bi bi-info-circle-fill"></i>
+              <span>Escalating will generate an STR (Suspicious Transaction Report) PDF for regulatory filing.</span>
+            </div>
+          </div>
+          <div class="modal-footer bg-light p-3">
+            <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeActionModal()">Cancel</button>
+            <button 
+              type="button" 
+              class="btn px-4 fw-bold" 
+              [ngClass]="currentAction === 'escalate' ? 'btn-danger' : 'btn-success'"
+              (click)="submitAction(caseData.caseReferenceNumber)"
+              [disabled]="isSubmitting || (currentAction === 'dismiss' && !actionNotes.trim())"
+            >
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+              {{ currentAction === 'escalate' ? 'Generate STR & Escalate' : 'Confirm Dismissal' }}
+            </button>
+          </div>
         </div>
       </div>
     </div>

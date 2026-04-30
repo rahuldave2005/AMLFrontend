@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CaseDashboardDto, CaseDetailDto, CaseRequestDto } from '../models/case.models';
+import { CaseDashboardDto, CaseDetailDto, CaseRequestDto, CaseEscalateDto } from '../models/case.models';
 
 @Injectable({
   providedIn: 'root'
@@ -20,5 +20,9 @@ export class CaseService {
 
   getCaseDetail(caseReferenceNumber: string): Observable<CaseDetailDto> {
     return this.http.get<CaseDetailDto>(`${this.apiBaseUrl}/${caseReferenceNumber}`);
+  }
+
+  updateCaseStatus(caseRef: string, dto: CaseEscalateDto): Observable<string> {
+    return this.http.put(`${this.apiBaseUrl}/${caseRef}`, dto, { responseType: 'text' });
   }
 }

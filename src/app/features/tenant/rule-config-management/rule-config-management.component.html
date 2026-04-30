@@ -1,1 +1,142 @@
-<p>rule-config-management works!</p>
+<div class="container-fluid p-4">
+  <!-- Header -->
+  <div class="mb-4 d-flex justify-content-between align-items-center">
+    <div>
+      <h2 class="h3 fw-bold text-gray-800">Rule Configuration</h2>
+      <p class="text-muted">Manage and fine-tune system detection rules for your bank.</p>
+    </div>
+    <button *ngIf="viewMode === 'detail'" class="btn btn-outline-secondary fw-bold" (click)="backToList()">
+      <i class="bi bi-arrow-left me-1"></i> Back to Rules
+    </button>
+  </div>
+
+  <!-- List View -->
+  <div *ngIf="viewMode === 'list'" class="card shadow-sm border-0 animate__animated animate__fadeIn">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-dark small text-uppercase fw-bold">
+            <tr>
+              <th class="px-4 py-3">Rule Code</th>
+              <th class="px-4 py-3">Rule Name</th>
+              <th class="px-4 py-3 text-center">Severity</th>
+              <th class="px-4 py-3 text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <ng-container *ngIf="rulesData$ | async as data; else loading">
+              <tr *ngFor="let rule of data.ruleInlineDtoList">
+                <td class="px-4 py-3">
+                  <span class="badge bg-primary-soft text-primary fw-bold">{{ rule.ruleCode }}</span>
+                </td>
+                <td class="px-4 py-3">
+                  <div class="fw-bold text-dark">{{ rule.ruleName }}</div>
+                </td>
+                <td class="px-4 py-3 text-center">
+                  <span class="badge" [ngClass]="getSeverityClass(rule.severity)">{{ rule.severity }}</span>
+                </td>
+                <td class="px-4 py-3 text-end">
+                  <button class="btn btn-sm btn-outline-primary fw-bold" (click)="viewRule(rule.ruleCode)">
+                    <i class="bi bi-gear-fill me-1"></i> View & Configure
+                  </button>
+                </td>
+              </tr>
+              <tr *ngIf="data.ruleInlineDtoList.length === 0">
+                <td colspan="4" class="text-center py-5">
+                  <div class="text-muted">No rules found.</div>
+                </td>
+              </tr>
+            </ng-container>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detail View -->
+  <div *ngIf="viewMode === 'detail' && selectedRule" class="animate__animated animate__fadeInRight">
+    <div class="row g-4">
+      <!-- Rule Information -->
+      <div class="col-xl-4">
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body">
+            <h6 class="text-muted small text-uppercase fw-bold mb-3">Rule Information</h6>
+            <div class="mb-3">
+              <label class="text-muted small d-block">Code</label>
+              <span class="fw-bold text-dark h5 mb-0">{{ selectedRule.ruleCode }}</span>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small d-block">Name</label>
+              <span class="fw-bold text-dark">{{ selectedRule.ruleName }}</span>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small d-block">Category</label>
+              <span class="badge bg-info-soft text-info">{{ selectedRule.category }}</span>
+            </div>
+            <hr>
+            <div>
+              <label class="text-muted small d-block mb-1">Description</label>
+              <p class="text-dark small mb-0">{{ selectedRule.description }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Parameters Configuration -->
+      <div class="col-xl-8">
+        <div class="card shadow-sm border-0">
+          <div class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold text-dark"><i class="bi bi-sliders me-2"></i>Rule Parameters</h5>
+            <div class="badge bg-light text-dark border">{{ getParameterKeys().length }} Parameters</div>
+          </div>
+          <div class="card-body p-4">
+            <div class="alert alert-info border-0 shadow-sm small mb-4 d-flex align-items-center gap-2">
+              <i class="bi bi-info-circle-fill"></i>
+              <span>Adjust the parameters below to customize the rule's behavior and threshold.</span>
+            </div>
+
+            <div class="row g-3">
+              <div *ngFor="let key of getParameterKeys()" class="col-md-6">
+                <div class="form-group p-3 bg-light rounded-3 border">
+                  <label class="form-label fw-bold text-dark small text-uppercase mb-2">{{ key | titlecase }}</label>
+                  <input 
+                    type="text" 
+                    class="form-control border-2 shadow-none" 
+                    [(ngModel)]="editedParameters[key]"
+                    [placeholder]="'Enter ' + key"
+                  >
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="getParameterKeys().length === 0" class="text-center py-4">
+              <div class="text-muted italic">This rule has no configurable parameters.</div>
+            </div>
+
+            <div class="mt-4 pt-4 border-top text-end">
+              <button class="btn btn-outline-secondary me-2 fw-bold" (click)="backToList()">Cancel</button>
+              <button 
+                class="btn btn-primary px-5 fw-bold text-uppercase" 
+                (click)="saveParameters()"
+                [disabled]="isSaving || getParameterKeys().length === 0"
+              >
+                <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-2"></span>
+                Save Configuration
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Template -->
+  <ng-template #loading>
+    <tr>
+      <td colspan="4" class="text-center py-5">
+        <div class="spinner-border spinner-border-sm text-primary me-2" role="status"></div>
+        <span class="text-muted">Fetching rules...</span>
+      </td>
+    </tr>
+  </ng-template>
+</div>

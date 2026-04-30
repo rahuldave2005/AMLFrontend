@@ -18,3 +18,9 @@ export interface CaseDetailDto {
   assignedBy: string;
   alerts: AlertDetailDto[];
 }
+
+export interface CaseEscalateDto {
+  caseReferenceNumber: string;
+  action: string;
+  notes: string;
+}
