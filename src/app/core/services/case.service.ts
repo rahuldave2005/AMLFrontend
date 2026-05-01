@@ -22,7 +22,7 @@ export class CaseService {
     return this.http.get<CaseDetailDto>(`${this.apiBaseUrl}/${caseReferenceNumber}`);
   }
 
-  updateCaseStatus(caseRef: string, dto: CaseEscalateDto): Observable<string> {
-    return this.http.put(`${this.apiBaseUrl}/${caseRef}`, dto, { responseType: 'text' });
+  updateCaseStatus( dto: CaseEscalateDto): Observable<string> {
+    return this.http.put(`${this.apiBaseUrl}`, dto, { responseType: 'text' });
   }
 }

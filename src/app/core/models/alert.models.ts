@@ -33,7 +33,7 @@ export interface AlertDashboardDto {
 
 export interface AlertTransactionDto {
   accountNumber: string;
-  counterpartyAccountNumber: string;
+  counterPartyAccountNumber: string;
   transactionDate: string;
   transactionType: TransactionType;
   transactionMode: TransactionMode;

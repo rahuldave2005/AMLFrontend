@@ -61,7 +61,7 @@ export class CaseDetailComponent implements OnInit {
     };
 
     this.isSubmitting = true;
-    this.caseService.updateCaseStatus(caseRef, dto).subscribe({
+    this.caseService.updateCaseStatus(dto).subscribe({
       next: (response) => {
         if (this.currentAction === 'escalate' && response) {
           window.open(response, '_blank');
