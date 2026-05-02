@@ -1,18 +1,18 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { AlertService } from '../../../core/services/alert.service';
-import { AlertDashboardDto } from '../../../core/models/alert.models';
+import { AlertStatus, GeneratedAlertDto } from '../../../core/models/alert.models';
 import { UserManagementService } from '../../../core/services/user-management.service';
 import { CaseService } from '../../../core/services/case.service';
 import { TenantUserDashboardDto } from '../../../core/models/user-management.models';
-import { Observable } from 'rxjs';
+import { Observable, Subject, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 
 @Component({
   selector: 'app-alerts',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule],
+  imports: [CommonModule, RouterModule, FormsModule, ReactiveFormsModule],
   templateUrl: './alerts.component.html',
   styleUrl: './alerts.component.css'
 })
@@ -21,35 +21,101 @@ export class AlertsComponent implements OnInit {
   private readonly userService = inject(UserManagementService);
   private readonly caseService = inject(CaseService);
   
-  alerts$!: Observable<AlertDashboardDto>;
+  alerts: GeneratedAlertDto[] = [];
   complianceOfficers$!: Observable<TenantUserDashboardDto>;
 
   // Selection Logic
   isSelectionMode = false;
   selectedAlerts = new Set<string>();
+  selectedClientNumber: string | null = null;
   
   // Modal state
   showAssignModal = false;
   assignedTo = '';
 
+  // Pagination & Filtering
+  currentPage = 0;
+  pageSize = 10;
+  isLastPage = false;
+  selectedStatus: AlertStatus | null = null;
+  isLoading = false;
+  
+  searchControl = new FormControl('');
+  readonly statuses = Object.values(AlertStatus);
+
   ngOnInit(): void {
-    this.alerts$ = this.alertService.getAlertDashboard();
+    this.loadAlerts();
     this.complianceOfficers$ = this.userService.getComplianceOfficers();
+
+    // Setup search with debounce
+    this.searchControl.valueChanges.pipe(
+      debounceTime(400),
+      distinctUntilChanged()
+    ).subscribe(() => {
+      this.currentPage = 0;
+      this.loadAlerts();
+    });
+  }
+
+  loadAlerts(): void {
+    this.isLoading = true;
+    this.alertService.getAlertDashboard(
+      this.selectedStatus,
+      this.searchControl.value || '',
+      this.currentPage,
+      this.pageSize
+    ).pipe(
+      finalize(() => this.isLoading = false)
+    ).subscribe({
+      next: (response) => {
+        this.alerts = response.content;
+        this.isLastPage = response.last;
+      },
+      error: (err) => {
+        console.error('Error loading alerts:', err);
+        this.alerts = [];
+      }
+    });
+  }
+
+
+  onStatusChange(): void {
+    this.currentPage = 0;
+    this.loadAlerts();
+  }
+
+  nextPage(): void {
+    if (!this.isLastPage) {
+      this.currentPage++;
+      this.loadAlerts();
+    }
+  }
+
+  prevPage(): void {
+    if (this.currentPage > 0) {
+      this.currentPage--;
+      this.loadAlerts();
+    }
   }
 
   toggleSelectionMode(): void {
     this.isSelectionMode = !this.isSelectionMode;
     if (!this.isSelectionMode) {
       this.selectedAlerts.clear();
+      this.selectedClientNumber = null;
     }
   }
 
-  onAlertSelect(alertNumber: string, event: Event): void {
+  onAlertSelect(alert: GeneratedAlertDto, event: Event): void {
     const checked = (event.target as HTMLInputElement).checked;
     if (checked) {
-      this.selectedAlerts.add(alertNumber);
+      this.selectedAlerts.add(alert.alertNumber);
+      this.selectedClientNumber = alert.clientNumber;
     } else {
-      this.selectedAlerts.delete(alertNumber);
+      this.selectedAlerts.delete(alert.alertNumber);
+      if (this.selectedAlerts.size === 0) {
+        this.selectedClientNumber = null;
+      }
     }
   }
 
@@ -82,8 +148,8 @@ export class AlertsComponent implements OnInit {
         alert('Case created successfully!');
         this.closeAssignModal();
         this.toggleSelectionMode();
-        // Refresh alerts
-        this.alerts$ = this.alertService.getAlertDashboard();
+        this.currentPage = 0;
+        this.loadAlerts();
       },
       error: (error) => {
         console.error('Error creating case:', error);

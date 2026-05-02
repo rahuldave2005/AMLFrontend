@@ -37,7 +37,7 @@ export class SidebarComponent implements OnInit {
       roles: ['SYSTEM_ADMIN']
     },
     {
-      label: 'Assign Rules',
+      label: 'Rule Management',
       route: '/rules/assign-rules',
       roles: ['SYSTEM_ADMIN']
     },

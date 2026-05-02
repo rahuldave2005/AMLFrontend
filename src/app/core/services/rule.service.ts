@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { RuleAssignmentDto, RuleDashboardDto, RuleDetailDto } from '../models/rule.models';
+import { RulePermissionDto, RuleDashboardDto, RuleDetailDto } from '../models/rule.models';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,20 @@ export class RuleService {
     return this.http.get<RuleDashboardDto>(`${this.apiBaseUrl}/rules`);
   }
 
+  getTenantRules(bankName: string, isActive: boolean): Observable<RuleDashboardDto> {
+    const params = new HttpParams().set('isActive', isActive.toString());
+    return this.http.get<RuleDashboardDto>(`${this.apiBaseUrl}/tenants/${bankName}/rules`, { params });
+  }
+
   getRuleDetails(ruleCode: string): Observable<RuleDetailDto> {
     return this.http.get<RuleDetailDto>(`${this.apiBaseUrl}/rules/${ruleCode}`);
   }
 
-  assignRules(dto: RuleAssignmentDto): Observable<string> {
-    return this.http.post(`${this.apiBaseUrl}/rules/assign`, dto, { responseType: 'text' });
+  updateRulePermissions(action: 'assign' | 'revoke', dto: RulePermissionDto): Observable<string> {
+    const params = new HttpParams().set('ruleAction', action);
+    return this.http.put(`${this.apiBaseUrl}/rules`, dto, { 
+      params, 
+      responseType: 'text' 
+    });
   }
 }

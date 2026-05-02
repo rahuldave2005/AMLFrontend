@@ -5,13 +5,16 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface JwtResponse {
+export interface LoginResponseDto {
   jwt: string;
   prefix: string;
   refreshToken: string;
   email: string;
   bankName: string;
   roles: string[];
+  firstName: string;
+  lastName: string;
+  isFirstLogin: boolean;
 }
 
 export interface AuthUser {
@@ -20,6 +23,9 @@ export interface AuthUser {
   roles: string[];
   primaryRole: string;
   initials: string;
+  firstName: string;
+  lastName: string;
+  isFirstLogin: boolean;
 }
 export interface PasswordChangeRequestDto {
   email: string;

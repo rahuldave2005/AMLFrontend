@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule, Router } from '@angular/router';
 import { CaseService } from '../../../../../core/services/case.service';
+import { AuthService } from '../../../../../core/services/auth.service';
 import { CaseDetailDto, CaseEscalateDto } from '../../../../../core/models/case.models';
 import { Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
@@ -17,6 +18,7 @@ export class CaseDetailComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly caseService = inject(CaseService);
+  private readonly authService = inject(AuthService);
 
   case$!: Observable<CaseDetailDto>;
   
@@ -25,6 +27,10 @@ export class CaseDetailComponent implements OnInit {
   currentAction: 'dismiss' | 'escalate' | null = null;
   actionNotes = '';
   isSubmitting = false;
+
+  get isComplianceOfficer(): boolean {
+    return this.authService.getCurrentUser()?.roles.includes('COMPLIANCE_OFFICER') || false;
+  }
 
   ngOnInit(): void {
     this.loadCaseDetail();
@@ -92,17 +98,15 @@ export class CaseDetailComponent implements OnInit {
 
   getStatusClass(status: string): string {
     switch (status?.toUpperCase()) {
-      case 'OPEN': return 'bg-primary-soft text-primary';
-      case 'UNDER_INVESTIGATION': return 'bg-warning-soft text-warning';
-      case 'CLOSED': 
-      case 'DISMISSED': return 'bg-success-soft text-success';
-      case 'ESCALATED': return 'bg-danger-soft text-danger';
+      case 'UNDER_INVESTIGATION': return 'bg-primary-soft text-primary';
+      case 'ESCALATED': return 'bg-warning-soft text-warning';
+      case 'CLOSED': return 'bg-success-soft text-success';
       default: return 'bg-light text-dark';
     }
   }
 
   isCaseActionable(status: string): boolean {
     const s = status?.toUpperCase();
-    return s !== 'CLOSED' && s !== 'DISMISSED' && s !== 'ESCALATED';
+    return s === 'UNDER_INVESTIGATION';
   }
 }

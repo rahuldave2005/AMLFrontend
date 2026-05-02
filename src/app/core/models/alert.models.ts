@@ -25,10 +25,17 @@ export interface GeneratedAlertDto {
   brokenRuleName: string;
   severity: Severity;
   generatedAt: string;
+  clientNumber: string;
+}
+
+export interface CustomSliceDto<T> {
+  content: T[];
+  last: boolean;
+  numberOfElements: number;
 }
 
 export interface AlertDashboardDto {
-  alerts: GeneratedAlertDto[];
+  alerts: CustomSliceDto<GeneratedAlertDto>;
 }
 
 export interface AlertTransactionDto {
@@ -47,6 +54,7 @@ export interface AlertDetailDto {
   severity: Severity;
   status: AlertStatus;
   clientNumber: string;
+  customerFullName: string;
   transactionCount: number;
   totalAmount: number;
   transactions: AlertTransactionDto[];

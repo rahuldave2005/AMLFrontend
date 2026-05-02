@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { AuthUser, JwtResponse, LoginRequest, PasswordChangeRequestDto } from '../models/auth.models';
+import { AuthUser, LoginResponseDto, LoginRequest, PasswordChangeRequestDto } from '../models/auth.models';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,10 @@ export class AuthService {
     PREFIX: 'aml.auth.prefix',
     EMAIL: 'aml.auth.email',
     BANK_NAME: 'aml.auth.bankName',
-    ROLES: 'aml.auth.roles'
+    ROLES: 'aml.auth.roles',
+    FIRST_NAME: 'aml.auth.firstName',
+    LAST_NAME: 'aml.auth.lastName',
+    IS_FIRST_LOGIN: 'aml.auth.isFirstLogin'
   };
 
   private readonly currentUserSubject = new BehaviorSubject<AuthUser | null>(null);
@@ -30,9 +33,9 @@ export class AuthService {
     this.rehydrate();
   }
 
-  login(payload: LoginRequest): Observable<JwtResponse> {
+  login(payload: LoginRequest): Observable<LoginResponseDto> {
     return this.http
-      .post<JwtResponse>(`${this.apiBaseUrl}/auth/login`, payload)
+      .post<LoginResponseDto>(`${this.apiBaseUrl}/auth/login`, payload)
       .pipe(tap((response) => this.persistSession(response)));
   }
 
@@ -52,9 +55,9 @@ export class AuthService {
     return localStorage.getItem(this.STORAGE_KEYS.PREFIX) ?? 'Bearer';
   }
 
-  refreshToken(token: string): Observable<JwtResponse> {
+  refreshToken(token: string): Observable<LoginResponseDto> {
     return this.http
-      .post<JwtResponse>(`${this.apiBaseUrl}/auth/refreshtoken`, { refreshToken: token })
+      .post<LoginResponseDto>(`${this.apiBaseUrl}/auth/refreshtoken`, { refreshToken: token })
       .pipe(tap((response) => this.persistSession(response)));
   }
 
@@ -74,12 +77,24 @@ export class AuthService {
     }
   }
 
-  private persistSession(response: JwtResponse): void {
+  completeFirstLogin(): void {
+    const user = this.currentUserSubject.value;
+    if (user) {
+      user.isFirstLogin = false;
+      this.currentUserSubject.next({ ...user });
+      localStorage.setItem(this.STORAGE_KEYS.IS_FIRST_LOGIN, 'false');
+    }
+  }
+
+  private persistSession(response: LoginResponseDto): void {
     localStorage.setItem(this.STORAGE_KEYS.TOKEN, response.jwt || '');
     localStorage.setItem(this.STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken || '');
     localStorage.setItem(this.STORAGE_KEYS.PREFIX, response.prefix || 'Bearer');
     localStorage.setItem(this.STORAGE_KEYS.EMAIL, response.email || '');
     localStorage.setItem(this.STORAGE_KEYS.BANK_NAME, response.bankName || '');
+    localStorage.setItem(this.STORAGE_KEYS.FIRST_NAME, response.firstName || '');
+    localStorage.setItem(this.STORAGE_KEYS.LAST_NAME, response.lastName || '');
+    localStorage.setItem(this.STORAGE_KEYS.IS_FIRST_LOGIN, String(response.isFirstLogin));
     
     const user = this.mapResponseToUser(response);
     localStorage.setItem(this.STORAGE_KEYS.ROLES, JSON.stringify(user.roles));
@@ -110,11 +125,14 @@ export class AuthService {
       refreshToken: localStorage.getItem(this.STORAGE_KEYS.REFRESH_TOKEN) ?? '',
       email,
       bankName: bankName ?? 'Unknown Bank',
-      roles: roles
+      roles: roles,
+      firstName: localStorage.getItem(this.STORAGE_KEYS.FIRST_NAME) ?? '',
+      lastName: localStorage.getItem(this.STORAGE_KEYS.LAST_NAME) ?? '',
+      isFirstLogin: localStorage.getItem(this.STORAGE_KEYS.IS_FIRST_LOGIN) === 'true'
     });
   }
 
-  private mapResponseToUser(response: JwtResponse): AuthUser {
+  private mapResponseToUser(response: LoginResponseDto): AuthUser {
     // 1. If explicit roles are provided, use them
     // 2. If not, try to extract from JWT
     // 3. Fallback to empty
@@ -127,7 +145,10 @@ export class AuthService {
       bankName: response.bankName || 'Unknown Bank',
       roles,
       primaryRole: roles[0] ?? 'USER',
-      initials: this.buildInitials(response.email || 'U')
+      initials: this.buildInitials(response.firstName, response.lastName),
+      firstName: response.firstName || '',
+      lastName: response.lastName || '',
+      isFirstLogin: response.isFirstLogin || false
     };
   }
 
@@ -157,9 +178,11 @@ export class AuthService {
     return fallbackRoles;
   }
 
-  private buildInitials(email: string): string {
-    if (!email || !email.includes('@')) return 'U';
-    const [localPart] = email.split('@');
-    return localPart.slice(0, 2).toUpperCase();
+  private buildInitials(firstName: string, lastName: string): string {
+    if (firstName && lastName) {
+      return (firstName[0] + lastName[0]).toUpperCase();
+    }
+    if (firstName) return firstName.slice(0, 2).toUpperCase();
+    return 'U';
   }
 }

@@ -21,32 +21,59 @@ export class RuleAssignmentComponent implements OnInit {
   tenants: TenantInlineDto[] = [];
   rules: RuleInlineDto[] = [];
   
+  selectedAction: 'assign' | 'revoke' = 'assign';
   selectedBankName: string = '';
   selectedRuleCodes: Set<string> = new Set();
   
   isLoading = false;
+  isFetchingRules = false;
   isSubmitting = false;
   message: string | null = null;
   isError = false;
 
   ngOnInit(): void {
-    this.loadData();
+    this.loadTenants();
   }
 
-  loadData(): void {
+  loadTenants(): void {
     this.isLoading = true;
-    // Load rules
-    this.ruleService.getAllRules().subscribe({
-      next: (data) => this.rules = data.ruleInlineDtoList,
-      error: (err) => console.error('Error fetching rules', err)
-    });
-
-    // Load tenants
     this.tenantService.getAllTenants().pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: (data) => this.tenants = data.tenantInlineDtoList,
       error: (err) => console.error('Error fetching tenants', err)
+    });
+  }
+
+  onBankChange(): void {
+    this.loadFilteredRules();
+  }
+
+  onActionChange(): void {
+    this.loadFilteredRules();
+  }
+
+  loadFilteredRules(): void {
+    if (!this.selectedBankName) {
+      this.rules = [];
+      return;
+    }
+
+    this.isFetchingRules = true;
+    this.selectedRuleCodes.clear();
+    
+    // If action is assign, we want isActive=false (unassigned rules)
+    // If action is revoke, we want isActive=true (already assigned rules)
+    const isActive = this.selectedAction === 'revoke';
+    
+    this.ruleService.getTenantRules(this.selectedBankName, isActive).pipe(
+      finalize(() => this.isFetchingRules = false)
+    ).subscribe({
+      next: (data) => this.rules = data.ruleInlineDtoList,
+      error: (err) => {
+        console.error('Error fetching filtered rules', err);
+        this.showStatus('Failed to fetch rules for the selected tenant.', true);
+      }
     });
   }
 
@@ -58,7 +85,7 @@ export class RuleAssignmentComponent implements OnInit {
     }
   }
 
-  onAssign(): void {
+  onSubmit(): void {
     if (!this.selectedBankName) {
       this.showStatus('Please select a tenant first', true);
       return;
@@ -78,15 +105,16 @@ export class RuleAssignmentComponent implements OnInit {
           ruleCodes: Array.from(this.selectedRuleCodes)
         };
 
-        this.ruleService.assignRules(payload).subscribe({
+        this.ruleService.updateRulePermissions(this.selectedAction, payload).subscribe({
           next: (res) => {
             this.showStatus(res, false);
             this.isSubmitting = false;
             this.selectedRuleCodes.clear();
-            this.selectedBankName = '';
+            // Reload rules after success to reflect changes
+            this.loadFilteredRules();
           },
           error: (err) => {
-            this.showStatus(err.error || 'Failed to assign rules', true);
+            this.showStatus(err.error || `Failed to ${this.selectedAction} rules`, true);
             this.isSubmitting = false;
           }
         });

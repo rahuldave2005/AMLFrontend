@@ -39,8 +39,16 @@ export class LoginComponent {
       .login(this.loginForm.getRawValue())
       .pipe(finalize(() => (this.isSubmitting = false)))
       .subscribe({
-        next: () => {
-          void this.router.navigate(['/dashboard']);
+        next: (response) => {
+          const isStaff = response.roles.some(role => 
+            role === 'COMPLIANCE_OFFICER' || role === 'BANK_ADMIN'
+          );
+
+          if (response.isFirstLogin && isStaff) {
+            void this.router.navigate(['/change-password']);
+          } else {
+            void this.router.navigate(['/dashboard']);
+          }
         },
         error: (error: HttpErrorResponse) => {
           this.loginError = this.getLoginErrorMessage(error);

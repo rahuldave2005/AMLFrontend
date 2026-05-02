@@ -19,6 +19,12 @@ export const routes: Routes = [
     component: LoginComponent
   },
   {
+    path: 'change-password',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['BANK_ADMIN', 'COMPLIANCE_OFFICER'] },
+    loadComponent: () => import('./features/change-password/change-password.component').then(m => m.ChangePasswordComponent)
+  },
+  {
     path: '',
     component: LayoutComponent,
     canActivate: [authGuard],
@@ -86,12 +92,7 @@ export const routes: Routes = [
         loadChildren: () => import('./features/tenant/user-management/user-management.routes').then(m => m.USER_MANAGEMENT_ROUTES)
       },
 
-      {
-        path: 'change-password',
-        canActivate: [roleGuard],
-        data: { roles: ['BANK_ADMIN', 'COMPLIANCE_OFFICER'] },
-        loadComponent: () => import('./features/change-password/change-password.component').then(m => m.ChangePasswordComponent)
-      },
+
 
       {
         path: '',

@@ -40,7 +40,7 @@
                 </div>
                 <div class="col-6">
                   <div class="text-muted small text-uppercase fw-bold">Total Amount</div>
-                  <div class="h4 fw-bold mb-0 text-primary">{{ alert.totalAmount | currency }}</div>
+                  <div class="h4 fw-bold mb-0 text-primary">{{ alert.totalAmount | currency:'INR':'symbol':'1.2-2' }}</div>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
                 </div>
                 <div class="ms-3">
                   <div class="text-muted small">Associated Client</div>
-                  <div class="fw-medium">Account Holder</div>
+                  <div class="fw-medium text-dark h6 mb-0">{{ alert.customerFullName }}</div>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@
                   {{ tx.transactionDate }}
                 </td>
                 <td class="px-4 py-3 text-end fw-bold" [ngClass]="tx.transactionType === 'DEBIT' ? 'text-danger' : 'text-success'">
-                  {{ tx.transactionType === 'DEBIT' ? '-' : '+' }}{{ tx.amount | currency }}
+                  {{ tx.transactionType === 'DEBIT' ? '-' : '+' }}{{ tx.amount | currency:'INR':'symbol':'1.2-2' }}
                 </td>
               </tr>
             </tbody>

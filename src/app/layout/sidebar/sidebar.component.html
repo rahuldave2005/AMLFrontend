@@ -13,8 +13,10 @@
 
     <ul *ngIf="currentUser$ | async as currentUser" class="nav nav-pills flex-column gap-2">
       <li *ngFor="let item of getAllowedMenuItems(currentUser); trackBy: trackByRoute" class="nav-item">
-        <a [routerLink]="item.route" routerLinkActive="active"
-          class="nav-link d-flex align-items-center justify-content-between">
+        <a [routerLink]="item.route" 
+           routerLinkActive="active"
+           [routerLinkActiveOptions]="{ exact: item.route === '/rules' }"
+           class="nav-link d-flex align-items-center justify-content-between">
           <span>{{ item.label }}</span>
           <span class="badge text-bg-light border">></span>
         </a>

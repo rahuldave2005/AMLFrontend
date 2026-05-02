@@ -12,7 +12,7 @@
         </nav>
         <h2 class="h3 fw-bold text-gray-800 mb-0">Case Investigation</h2>
       </div>
-      <div class="d-flex gap-2" *ngIf="isCaseActionable(caseData.caseStatus)">
+      <div class="d-flex gap-2" *ngIf="isCaseActionable(caseData.caseStatus) && isComplianceOfficer">
         <button class="btn btn-outline-danger fw-bold" (click)="openActionModal('escalate')">
           <i class="bi bi-file-earmark-pdf me-1"></i> Escalate Case
         </button>
@@ -23,7 +23,7 @@
           <i class="bi bi-arrow-left me-1"></i> Back to List
         </button>
       </div>
-      <div class="d-flex gap-2" *ngIf="!isCaseActionable(caseData.caseStatus)">
+      <div class="d-flex gap-2" *ngIf="!isCaseActionable(caseData.caseStatus) || !isComplianceOfficer">
         <button class="btn btn-outline-secondary fw-bold" routerLink="/cases">
           <i class="bi bi-arrow-left me-1"></i> Back to List
         </button>

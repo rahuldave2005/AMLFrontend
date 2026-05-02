@@ -3,30 +3,51 @@
     <div class="col-lg-8">
       <div class="card border-0 shadow-lg overflow-hidden">
         <div class="card-header bg-primary text-white p-4">
-          <h2 class="h4 mb-0 fw-bold">Assign Rules to Tenant</h2>
-          <p class="mb-0 opacity-75 small">Configure active monitoring rules for specific bank schemas.</p>
+          <h2 class="h4 mb-0 fw-bold">Rule Management</h2>
+          <p class="mb-0 opacity-75 small">Assign or revoke monitoring rules for specific bank schemas.</p>
         </div>
         
         <div class="card-body p-4">
           <!-- Status Messages -->
           <div *ngIf="message" class="alert mb-4 animate__animated animate__fadeIn" 
                [ngClass]="isError ? 'alert-danger' : 'alert-success'">
-            {{ message }}
+            <i class="bi" [ngClass]="isError ? 'bi-exclamation-triangle-fill' : 'bi-check-circle-fill'"></i>
+            <span class="ms-2">{{ message }}</span>
           </div>
 
           <div *ngIf="isLoading" class="text-center py-5">
             <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading data...</span>
+              <span class="visually-hidden">Loading tenants...</span>
             </div>
-            <p class="mt-2 text-muted">Fetching tenants and rules...</p>
+            <p class="mt-2 text-muted">Fetching tenants...</p>
           </div>
 
-          <form *ngIf="!isLoading" (ngSubmit)="onAssign()">
+          <form *ngIf="!isLoading" (ngSubmit)="onSubmit()">
+            
+            <!-- Action Selection -->
+            <div class="mb-4">
+              <label class="form-label fw-bold">1. Choose Action</label>
+              <div class="btn-group w-100 shadow-sm" role="group">
+                <input type="radio" class="btn-check" name="action" id="assignAction" 
+                       [(ngModel)]="selectedAction" value="assign" (change)="onActionChange()">
+                <label class="btn btn-outline-primary py-3 fw-semibold" for="assignAction">
+                  <i class="bi bi-plus-circle me-2"></i>Assign Rules
+                </label>
+
+                <input type="radio" class="btn-check" name="action" id="revokeAction" 
+                       [(ngModel)]="selectedAction" value="revoke" (change)="onActionChange()">
+                <label class="btn btn-outline-danger py-3 fw-semibold" for="revokeAction">
+                  <i class="bi bi-dash-circle me-2"></i>Revoke Rules
+                </label>
+              </div>
+            </div>
+
             <!-- Tenant Selection -->
             <div class="mb-4">
-              <label for="tenantSelect" class="form-label fw-bold">1. Select Tenant</label>
+              <label for="tenantSelect" class="form-label fw-bold">2. Select Tenant</label>
               <select id="tenantSelect" class="form-select form-select-lg shadow-sm" 
-                      [(ngModel)]="selectedBankName" name="selectedBankName" required>
+                      [(ngModel)]="selectedBankName" name="selectedBankName" 
+                      (change)="onBankChange()" required>
                 <option value="" disabled selected>Choose a bank...</option>
                 <option *ngFor="let tenant of tenants" [value]="tenant.bankName">
                   {{ tenant.bankName }} ({{ tenant.ifsc }})
@@ -36,12 +57,31 @@
 
             <!-- Rules Selection -->
             <div class="mb-4">
-              <label class="form-label fw-bold">2. Select Monitoring Rules</label>
-              <div class="rules-container border rounded p-3 bg-light">
+              <label class="form-label fw-bold">3. Select Monitoring Rules</label>
+              
+              <div *ngIf="isFetchingRules" class="text-center py-4 border rounded bg-light">
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+                <span class="ms-2 text-muted">Updating available rules...</span>
+              </div>
+
+              <div *ngIf="!isFetchingRules && selectedBankName && rules.length === 0" 
+                   class="alert alert-info border-0 shadow-sm">
+                <i class="bi bi-info-circle-fill me-2"></i>
+                No rules available to {{ selectedAction }} for this tenant.
+              </div>
+
+              <div *ngIf="!isFetchingRules && !selectedBankName" class="text-center py-4 border rounded bg-light text-muted small">
+                Please select a tenant to view available rules.
+              </div>
+
+              <div class="rules-container border rounded p-3 bg-light" *ngIf="!isFetchingRules && rules.length > 0">
                 <div class="row g-3">
                   <div class="col-md-6" *ngFor="let rule of rules">
                     <div class="rule-card border rounded p-3 bg-white shadow-sm transition-all h-100"
-                         [ngClass]="{'border-primary bg-primary-subtle': selectedRuleCodes.has(rule.ruleCode)}"
+                         [ngClass]="{
+                            'border-primary bg-primary-light': selectedAction === 'assign' && selectedRuleCodes.has(rule.ruleCode),
+                            'border-danger bg-danger-light': selectedAction === 'revoke' && selectedRuleCodes.has(rule.ruleCode)
+                         }"
                          (click)="toggleRule(rule.ruleCode)">
                       <div class="form-check">
                         <input class="form-check-input" type="checkbox" 
@@ -60,10 +100,12 @@
             </div>
 
             <div class="d-grid mt-5">
-              <button type="submit" class="btn btn-primary btn-lg shadow rounded-pill py-3 fw-bold"
+              <button type="submit" class="btn btn-lg shadow rounded-pill py-3 fw-bold"
+                      [ngClass]="selectedAction === 'assign' ? 'btn-primary' : 'btn-danger'"
                       [disabled]="isSubmitting || !selectedBankName || selectedRuleCodes.size === 0">
                 <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
-                {{ isSubmitting ? 'Assigning Rules...' : 'Confirm Rule Assignment' }}
+                {{ isSubmitting ? (selectedAction === 'assign' ? 'Assigning...' : 'Revoking...') : 
+                   (selectedAction === 'assign' ? 'Confirm Rule Assignment' : 'Confirm Rule Revocation') }}
               </button>
             </div>
           </form>

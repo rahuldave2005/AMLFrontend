@@ -23,7 +23,7 @@ export interface RuleDetailDto {
   parameters: { [key: string]: string };
 }
 
-export interface RuleAssignmentDto {
+export interface RulePermissionDto {
   schemaName: string;
   ruleCodes: string[];
 }

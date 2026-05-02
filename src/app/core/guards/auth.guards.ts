@@ -9,8 +9,20 @@ import { AuthService } from '../services/auth.service';
 export const authGuard: CanActivateFn = (route, state) => {
   const authService = inject(AuthService);
   const router = inject(Router);
+  const user = authService.getCurrentUser();
 
-  if (authService.getCurrentUser()) {
+  if (user) {
+    // Redirect staff members to change password on first login
+    const isStaff = user.roles.some(role => role === 'BANK_ADMIN' || role === 'COMPLIANCE_OFFICER');
+    if (user.isFirstLogin && isStaff && state.url !== '/change-password') {
+      return router.createUrlTree(['/change-password']);
+    }
+    
+    // Prevent access to change-password if not a first login
+    if (!user.isFirstLogin && state.url === '/change-password') {
+      return router.createUrlTree(['/dashboard']);
+    }
+
     return true;
   }
 
