@@ -57,7 +57,7 @@ export class SidebarComponent implements OnInit {
       roles: ['BANK_ADMIN']
     },
     {
-      label: 'Users',
+      label: 'Compliance Officers',
       route: '/tenant-users',
       roles: ['BANK_ADMIN']
     },
@@ -74,7 +74,7 @@ export class SidebarComponent implements OnInit {
     {
       label: 'Str Filing',
       route: '/str-filing',
-      roles: ['COMPLIANCE_OFFICER']
+      roles: ['COMPLIANCE_OFFICER','BANK_ADMIN']
     },
     
   ];

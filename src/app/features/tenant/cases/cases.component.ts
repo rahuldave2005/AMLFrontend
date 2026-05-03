@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CaseService } from '../../../core/services/case.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { CaseDashboardDto, CaseStatus } from '../../../core/models/case.models';
 import { Subject, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 
@@ -15,6 +16,7 @@ import { Subject, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 })
 export class CasesComponent implements OnInit {
   private readonly caseService = inject(CaseService);
+  private readonly authService = inject(AuthService);
   
   cases: CaseDashboardDto[] = [];
   isLoading = false;
@@ -28,6 +30,10 @@ export class CasesComponent implements OnInit {
   
   caseRefControl = new FormControl('');
   readonly statuses = Object.values(CaseStatus);
+
+  get isComplianceOfficer(): boolean {
+    return this.authService.getCurrentUser()?.roles.includes('COMPLIANCE_OFFICER') || false;
+  }
 
   ngOnInit(): void {
     this.loadCases();

@@ -1,0 +1,73 @@
+<div class="container-fluid p-4">
+  <div *ngIf="filing$ | async as filing; else loading">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-1">
+            <li class="breadcrumb-item"><a routerLink="/str-filing">STR Filings</a></li>
+            <li class="breadcrumb-item active">{{ filing.referenceNumber }}</li>
+          </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-gray-800 mb-0">Filing Details</h2>
+      </div>
+      <button class="btn btn-primary shadow-sm fw-bold"
+        (click)="downloadPdf(filing.pdfStoragePath, filing.referenceNumber)">
+        <i class="bi bi-file-earmark-pdf-fill me-1"></i> Download PDF Report
+      </button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="text-muted small text-uppercase fw-bold mb-3 border-bottom pb-2">Filing Overview</h6>
+            <div class="mb-3">
+              <label class="text-muted small d-block mb-1">Reference Number</label>
+              <div class="h5 fw-bold text-dark">{{ filing.referenceNumber }}</div>
+            </div>
+            <div class="mb-3">
+              <label class="text-muted small d-block mb-1">Case Reference</label>
+              <a [routerLink]="['/cases', filing.caseReferenceNumber]" class="fw-bold text-primary text-decoration-none">
+                {{ filing.caseReferenceNumber }}
+              </a>
+            </div>
+            <div>
+              <label class="text-muted small d-block mb-1">Filed At</label>
+              <div class="fw-bold text-dark">{{ filing.filedAt | date:'medium' }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="text-muted small text-uppercase fw-bold mb-3 border-bottom pb-2">Entity Information</h6>
+            <div class="mb-3">
+              <label class="text-muted small d-block mb-1">Client Number</label>
+              <div class="h5 fw-bold text-dark">{{ filing.clientNumber }}</div>
+            </div>
+            <div *ngIf="!isComplianceOfficer">
+              <label class="text-muted small d-block mb-1">Filed By</label>
+              <div class="d-flex align-items-center">
+                <div
+                  class="avatar-xs bg-info-soft text-info rounded-circle d-flex align-items-center justify-content-center me-2"
+                  style="width: 32px; height: 32px;">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+                <span class="fw-bold text-dark">{{ filing.filedBy }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #loading>
+    <div class="text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status"></div>
+      <p class="text-muted">Loading filing details...</p>
+    </div>
+  </ng-template>
+</div>

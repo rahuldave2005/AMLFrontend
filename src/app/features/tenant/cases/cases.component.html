@@ -19,7 +19,7 @@
                [formControl]="caseRefControl">
       </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-3" *ngIf="!isComplianceOfficer">
       <input type="text" class="form-control shadow-sm" 
              placeholder="Filter by Assigned Email..." 
              [(ngModel)]="assignedToEmail" (ngModelChange)="onFilterChange()">
@@ -45,7 +45,7 @@
           <thead class="bg-light text-dark small text-uppercase fw-bold">
             <tr>
               <th class="px-4 py-3">Reference Number</th>
-              <th class="px-4 py-3">Assigned To</th>
+              <th class="px-4 py-3" *ngIf="!isComplianceOfficer">Assigned To</th>
               <th class="px-4 py-3 text-center">Status</th>
               <th class="px-4 py-3 text-end">Actions</th>
             </tr>
@@ -63,7 +63,7 @@
                 <td class="px-4 py-3">
                   <span class="fw-bold text-dark">{{ caseItem.caseReferenceNumber }}</span>
                 </td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3" *ngIf="!isComplianceOfficer">
                   <div class="d-flex align-items-center">
                     <div class="avatar-sm bg-light rounded-circle d-flex align-items-center justify-content-center me-2">
                       <i class="bi bi-person text-primary"></i>

@@ -19,6 +19,7 @@
               <th class="px-4 py-3">Employee Code</th>
               <th class="px-4 py-3">First Name</th>
               <th class="px-4 py-3">Last Name</th>
+              <th class="px-4 py-3 text-center">Active Workload</th>
               <th class="px-4 py-3 text-end">Actions</th>
             </tr>
           </thead>
@@ -32,6 +33,11 @@
                 </td>
                 <td class="px-4 py-3 fw-bold text-dark">{{ officer.firstName }}</td>
                 <td class="px-4 py-3 fw-bold text-dark">{{ officer.lastName }}</td>
+                <td class="px-4 py-3 text-center">
+                  <span class="badge bg-light text-dark border">
+                    {{ officer.activeWorkload }}
+                  </span>
+                </td>
                 <td class="px-4 py-3 text-end">
                   <button 
                     (click)="viewDetails(officer.employeeCode)" 

@@ -3,6 +3,7 @@ export interface TenantUserInlineDto {
   firstName: string;
   lastName: string;
   email: string;
+  activeWorkload: number;
 }
 
 export interface TenantUserDashboardDto {

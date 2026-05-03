@@ -80,7 +80,7 @@
                   <span class="fw-bold text-dark">{{ alert.alertNumber }}</span>
                 </td>
                 <td class="px-4 py-3">
-                  <code class="text-primary fw-medium">{{ alert.clientNumber }}</code>
+                  <span class="text-dark fw-medium">{{ alert.clientNumber }}</span>
                 </td>
                 <td class="px-4 py-3">
                   <div class="fw-medium text-dark">{{ alert.brokenRuleName }}</div>
@@ -160,7 +160,7 @@
               <option value="" disabled selected>Select an officer...</option>
               <ng-container *ngIf="complianceOfficers$ | async as officers">
                 <option *ngFor="let officer of officers.userInlineDtoList" [value]="officer.email">
-                  {{ officer.firstName }} {{ officer.lastName }} ({{ officer.email }})
+                  {{ officer.firstName }} {{ officer.lastName }} (Active Workload : {{ officer.activeWorkload }})
                 </option>
               </ng-container>
             </select>

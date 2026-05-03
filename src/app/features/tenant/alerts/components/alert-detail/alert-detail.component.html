@@ -106,7 +106,7 @@
                   <span class="badge bg-light text-dark border me-1">{{ tx.transactionType }}</span>
                   <span class="small text-muted">{{ tx.transactionMode }}</span>
                 </td>
-                <td class="px-4 py-3 small text-secondary">
+                <td class="px-4 py-3 small text-secondary text-dark">
                   {{ tx.transactionDate }}
                 </td>
                 <td class="px-4 py-3 text-end fw-bold" [ngClass]="tx.transactionType === 'DEBIT' ? 'text-danger' : 'text-success'">

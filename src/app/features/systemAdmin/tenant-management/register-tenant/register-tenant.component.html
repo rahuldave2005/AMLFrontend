@@ -36,20 +36,20 @@
               </div>
               <div class="row g-4">
                 <div class="col-md-8">
-                  <label for="bankName" class="form-label fw-semibold small text-uppercase">Bank Name</label>
+                  <label for="bankName" class="form-label fw-semibold small text-uppercase">Bank Name <span class="text-danger">*</span></label>
                   <input type="text" id="bankName" formControlName="bankName" class="form-control form-control-lg border-2 shadow-none" 
                          placeholder="Enter institution full name" [class.is-invalid]="registerForm.get('bankName')?.touched && registerForm.get('bankName')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('bankName', 'required')">Bank name is required.</div>
                 </div>
                 <div class="col-md-4">
-                  <label for="ifsc" class="form-label fw-semibold small text-uppercase">IFSC Code</label>
+                  <label for="ifsc" class="form-label fw-semibold small text-uppercase">IFSC Code <span class="text-danger">*</span></label>
                   <input type="text" id="ifsc" formControlName="ifsc" class="form-control form-control-lg border-2 shadow-none text-uppercase font-monospace" 
                          placeholder="ABCD0123456" [class.is-invalid]="registerForm.get('ifsc')?.touched && registerForm.get('ifsc')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('ifsc', 'required')">IFSC code is required.</div>
                   <div class="invalid-feedback" *ngIf="hasError('ifsc', 'pattern')">Invalid format (e.g., ABCD0123456).</div>
                 </div>
                 <div class="col-12">
-                  <label for="contactEmail" class="form-label fw-semibold small text-uppercase">Contact Email</label>
+                  <label for="contactEmail" class="form-label fw-semibold small text-uppercase">Contact Email <span class="text-danger">*</span></label>
                   <input type="email" id="contactEmail" formControlName="contactEmail" class="form-control form-control-lg border-2 shadow-none" 
                          placeholder="institution@bank.com" [class.is-invalid]="registerForm.get('contactEmail')?.touched && registerForm.get('contactEmail')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('contactEmail', 'required')">Contact email is required.</div>
@@ -65,7 +65,7 @@
               </div>
               <div class="row g-4">
                 <div class="col-md-4">
-                  <label for="firstName" class="form-label fw-semibold small text-uppercase">First Name</label>
+                  <label for="firstName" class="form-label fw-semibold small text-uppercase">First Name <span class="text-danger">*</span></label>
                   <input type="text" id="firstName" formControlName="firstName" class="form-control border-2 shadow-none" 
                          placeholder="First name" [class.is-invalid]="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('firstName', 'required')">Required.</div>
@@ -76,20 +76,20 @@
                          placeholder="Optional">
                 </div>
                 <div class="col-md-4">
-                  <label for="lastName" class="form-label fw-semibold small text-uppercase">Last Name</label>
+                  <label for="lastName" class="form-label fw-semibold small text-uppercase">Last Name <span class="text-danger">*</span></label>
                   <input type="text" id="lastName" formControlName="lastName" class="form-control border-2 shadow-none" 
                          placeholder="Last name" [class.is-invalid]="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('lastName', 'required')">Required.</div>
                 </div>
                 <div class="col-md-8">
-                  <label for="bankAdminEmail" class="form-label fw-semibold small text-uppercase">Admin Email</label>
+                  <label for="bankAdminEmail" class="form-label fw-semibold small text-uppercase">Admin Email <span class="text-danger">*</span></label>
                   <input type="email" id="bankAdminEmail" formControlName="bankAdminEmail" class="form-control border-2 shadow-none" 
                          placeholder="admin@bank.com" [class.is-invalid]="registerForm.get('bankAdminEmail')?.touched && registerForm.get('bankAdminEmail')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('bankAdminEmail', 'required')">Admin email is required.</div>
                   <div class="invalid-feedback" *ngIf="hasError('bankAdminEmail', 'email')">Invalid email format.</div>
                 </div>
                 <div class="col-md-4">
-                  <label for="employeeCode" class="form-label fw-semibold small text-uppercase">Employee Code</label>
+                  <label for="employeeCode" class="form-label fw-semibold small text-uppercase">Employee Code <span class="text-danger">*</span></label>
                   <input type="text" id="employeeCode" formControlName="employeeCode" class="form-control border-2 shadow-none text-uppercase" 
                          placeholder="EMP-001" [class.is-invalid]="registerForm.get('employeeCode')?.touched && registerForm.get('employeeCode')?.invalid">
                   <div class="invalid-feedback" *ngIf="hasError('employeeCode', 'required')">Required.</div>

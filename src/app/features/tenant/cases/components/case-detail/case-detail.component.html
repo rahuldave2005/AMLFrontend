@@ -13,6 +13,9 @@
         <h2 class="h3 fw-bold text-gray-800 mb-0">Case Investigation</h2>
       </div>
       <div class="d-flex gap-2" *ngIf="isCaseActionable(caseData.caseStatus) && isComplianceOfficer">
+        <button class="btn btn-outline-primary fw-bold" (click)="viewCustomerDetails(caseData.alerts[0].clientNumber)">
+          <i class="bi bi-person-lines-fill me-1"></i> View Customer
+        </button>
         <button class="btn btn-outline-danger fw-bold" (click)="openActionModal('escalate')">
           <i class="bi bi-file-earmark-pdf me-1"></i> Escalate Case
         </button>
@@ -24,6 +27,9 @@
         </button>
       </div>
       <div class="d-flex gap-2" *ngIf="!isCaseActionable(caseData.caseStatus) || !isComplianceOfficer">
+        <button class="btn btn-outline-primary fw-bold" (click)="viewCustomerDetails(caseData.alerts[0].clientNumber)">
+          <i class="bi bi-person-lines-fill me-1"></i> View Customer
+        </button>
         <button class="btn btn-outline-secondary fw-bold" routerLink="/cases">
           <i class="bi bi-arrow-left me-1"></i> Back to List
         </button>
@@ -52,7 +58,12 @@
             </div>
             <div>
               <label class="text-muted small d-block mb-1">Assigned By</label>
-              <span class="fw-medium text-secondary">{{ caseData.assignedBy }}</span>
+              <div class="d-flex align-items-center">
+                <div class="avatar-xs bg-info-soft rounded-circle d-flex align-items-center justify-content-center me-2">
+                  <i class="bi bi-person-check text-info"></i>
+                </div>
+                <span class="fw-bold text-dark">{{ caseData.assignedBy }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -171,6 +182,106 @@
       </div>
     </div>
 
+    <!-- Customer Detail Modal -->
+    <div *ngIf="showCustomerModal" class="modal-backdrop fade show"></div>
+    <div *ngIf="showCustomerModal" class="modal fade show d-block" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title fw-bold">
+              <i class="bi bi-person-bounding-box me-2"></i>Customer Information
+            </h5>
+            <button type="button" class="btn-close btn-close-white" (click)="closeCustomerModal()"></button>
+          </div>
+          <div class="modal-body p-4">
+            <div *ngIf="isLoadingCustomer" class="text-center py-4">
+              <div class="spinner-border text-info mb-3"></div>
+              <p class="text-muted">Loading customer details...</p>
+            </div>
+
+            <div *ngIf="!isLoadingCustomer && customerData">
+              <!-- Name & Client Info -->
+              <div class="d-flex align-items-center mb-4 p-3 bg-light rounded-4">
+                <div class="avatar-md bg-info-soft text-info rounded-circle d-flex align-items-center justify-content-center me-3 shadow-sm" style="width: 60px; height: 60px;">
+                  <i class="bi bi-person-circle fs-2"></i>
+                </div>
+                <div>
+                  <h4 class="fw-bold text-dark mb-0">{{ customerData.firstName }} {{ customerData.middleName ? customerData.middleName + ' ' : '' }}{{ customerData.lastName }}</h4>
+                  <div class="text-muted small fw-bold">CLIENT #{{ customerData.clientNumber }}</div>
+                </div>
+                <div class="ms-auto text-end">
+                  <div class="badge" [ngClass]="getSeverityClass(customerData.riskRate)">
+                    {{ customerData.riskRate }} RISK
+                  </div>
+                  <div *ngIf="customerData.isPep" class="badge bg-danger mt-1 d-block">PEP</div>
+                </div>
+              </div>
+
+              <div class="row g-3">
+                <!-- Identity Section -->
+                <div class="col-12"><h6 class="text-primary small text-uppercase fw-bold border-bottom pb-2 mb-3">Identification</h6></div>
+                <div class="col-md-6">
+                  <label class="text-muted small fw-bold d-block mb-1">Aadhar Number</label>
+                  <div class="fw-bold text-dark border-start border-3 border-info ps-2">{{ customerData.aadharNumber }}</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="text-muted small fw-bold d-block mb-1">PAN Card</label>
+                  <div class="fw-bold text-dark border-start border-3 border-info ps-2">{{ customerData.pan }}</div>
+                </div>
+
+                <!-- Occupation Section -->
+                <div class="col-12 mt-4"><h6 class="text-primary small text-uppercase fw-bold border-bottom pb-2 mb-3">Employment & Financials</h6></div>
+                <div class="col-md-6">
+                  <label class="text-muted small fw-bold d-block mb-1">Occupation</label>
+                  <div class="fw-bold text-dark">{{ customerData.occupation }} ({{ customerData.occupationType }})</div>
+                </div>
+                <div class="col-md-6">
+                  <label class="text-muted small fw-bold d-block mb-1">Monthly Income</label>
+                  <div class="fw-bold text-success">₹ {{ customerData.monthlyIncome | number:'1.2-2' }}</div>
+                </div>
+
+                <!-- Family Section -->
+                <div class="col-12 mt-4"><h6 class="text-primary small text-uppercase fw-bold border-bottom pb-2 mb-3">Organization & Groups</h6></div>
+                <div class="col-md-6">
+                  <label class="text-muted small fw-bold d-block mb-1">Family Code</label>
+                  <div class="d-inline-flex align-items-center bg-white border rounded-pill px-3 py-1 shadow-sm">
+                    <i class="bi bi-diagram-3-fill text-primary me-2"></i>
+                    <span class="fw-bold text-primary">{{ customerData.familyCode }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer bg-light p-3">
+            <button type="button" class="btn btn-outline-primary px-4 fw-bold me-auto" 
+                    (click)="downloadTransactions(customerData.clientNumber)" 
+                    [disabled]="isDownloadingPdf"
+                    *ngIf="customerData">
+              <span *ngIf="isDownloadingPdf" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isDownloadingPdf" class="bi bi-file-earmark-pdf-fill me-1"></i>
+              Download Transactions
+            </button>
+            <button type="button" class="btn btn-secondary px-4 fw-bold" (click)="closeCustomerModal()">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STR Generation Success Notification -->
+    <div *ngIf="isStrGenerated" class="alert alert-success border-0 shadow-sm rounded-4 p-4 mb-4 d-flex align-items-center justify-content-between">
+      <div class="d-flex align-items-center">
+        <div class="bg-white rounded-circle p-2 me-3 shadow-sm">
+          <i class="bi bi-file-earmark-check-fill text-success fs-3"></i>
+        </div>
+        <div>
+          <h5 class="alert-heading fw-bold mb-1">STR Generated Successfully!</h5>
+          <p class="mb-0 text-dark opacity-75">The Suspicious Transaction Report has been generated and is ready for download.</p>
+        </div>
+      </div>
+      <button class="btn btn-success fw-bold px-4 py-2 rounded-pill shadow-sm d-flex align-items-center gap-2" (click)="downloadGeneratedStr()">
+        <i class="bi bi-download"></i> Download STR PDF
+      </button>
+    </div>
   </div>
 
   <ng-template #loading>
