@@ -1,0 +1,145 @@
+<div class="container-fluid p-4">
+  <div *ngIf="fileDetail$ | async as fileDetail; else loadingDetail">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb mb-1">
+            <li class="breadcrumb-item"><a routerLink="/file-management">File Management</a></li>
+            <li class="breadcrumb-item active">{{ fileDetail.fileName }}</li>
+          </ol>
+        </nav>
+        <h2 class="h3 fw-bold text-gray-800 mb-0">File Details</h2>
+      </div>
+      <div>
+        <span class="badge px-3 py-2 fs-6 rounded-pill" [ngClass]="getStatusClass(fileDetail.fileStatus)">
+          {{ fileDetail.fileStatus }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="text-muted small text-uppercase fw-bold mb-3 border-bottom pb-2">Overview</h6>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">File Number</label>
+                <div class="fw-bold text-dark">{{ fileDetail.fileNumber }}</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">File Name</label>
+                <div class="fw-bold text-primary">{{ fileDetail.fileName }}</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">File Type</label>
+                <div class="fw-bold text-dark">{{ fileDetail.fileType }}</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">Upload Date</label>
+                <div class="fw-bold text-dark">{{ fileDetail.uploadDate | date:'dd/MM/yyyy' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="card shadow-sm border-0 h-100">
+          <div class="card-body">
+            <h6 class="text-muted small text-uppercase fw-bold mb-3 border-bottom pb-2">Processing Metrics</h6>
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">Total Records</label>
+                <div class="h4 fw-bold text-dark mb-0">{{ fileDetail.totalRecords || 0 }}</div>
+              </div>
+              <div class="col-6 mb-3">
+                <label class="text-muted small d-block mb-1">File Size</label>
+                <div class="h4 fw-bold text-dark mb-0">{{ (fileDetail.fileSizeInBytes / 1024) | number:'1.0-2' }} KB</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Errors Section -->
+    <div class="card shadow-sm border-0 rounded-4 overflow-hidden mb-4">
+      <div class="card-header bg-white p-4 border-bottom">
+        <h5 class="mb-0 fw-bold d-flex align-items-center text-danger">
+          <i class="bi bi-exclamation-triangle-fill me-2"></i> File Processing Errors
+        </h5>
+      </div>
+
+      <div *ngIf="isLoadingErrors" class="text-center py-5">
+        <div class="spinner-border text-danger" role="status"></div>
+      </div>
+
+      <div *ngIf="!isLoadingErrors" class="table-responsive">
+        <table class="table table-hover align-middle mb-0">
+          <thead class="bg-light text-dark small text-uppercase fw-bold">
+            <tr>
+              <th class="px-4 py-3" style="width: 15%">Row Number</th>
+              <th class="px-4 py-3" style="width: 25%">Field Name</th>
+              <th class="px-4 py-3">Error Message</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let error of errors" class="border-bottom">
+              <td class="px-4 py-3">
+                <span class="badge bg-danger-soft text-danger fw-bold border border-danger">Row {{ error.rowNumber }}</span>
+              </td>
+              <td class="px-4 py-3">
+                <code class="text-dark fw-bold px-2 py-1 rounded">{{ error.fieldName }}</code>
+              </td>
+              <td class="px-4 py-3 text-secondary text-dark">
+                {{ error.errorMessage }}
+              </td>
+            </tr>
+            
+            <tr *ngIf="errors.length === 0">
+              <td colspan="3" class="text-center py-5">
+                <div class="text-muted">
+                  <i class="bi bi-check-circle display-4 d-block mb-3 text-success opacity-75"></i>
+                  No processing errors found for this file.
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Errors Pagination -->
+      <div class="card-footer bg-white border-top p-3" *ngIf="errors.length > 0">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="text-muted small">
+            Showing errors page {{ currentPage + 1 }}
+          </span>
+          <div class="btn-group shadow-sm">
+            <button 
+              class="btn btn-outline-secondary btn-sm px-3" 
+              [disabled]="currentPage === 0" 
+              (click)="prevPage()">
+              <i class="bi bi-chevron-left"></i> Previous
+            </button>
+            <button 
+              class="btn btn-outline-secondary btn-sm px-3" 
+              [disabled]="isLastPage" 
+              (click)="nextPage()">
+              Next <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <ng-template #loadingDetail>
+    <div class="text-center py-5 mt-5">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+      <h5 class="text-muted fw-normal">Loading file details...</h5>
+    </div>
+  </ng-template>
+</div>

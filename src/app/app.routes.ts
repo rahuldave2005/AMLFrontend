@@ -76,6 +76,12 @@ export const routes: Routes = [
         loadChildren: () => import('./features/tenant/str-filing/str-filing.routes').then(m => m.STR_FILING_ROUTES)
       },
       {
+        path: 'file-management',
+        canActivate: [roleGuard],
+        data: { roles: ['BANK_ADMIN'] },
+        loadChildren: () => import('./features/tenant/file-management/file-management.routes').then(m => m.FILE_MANAGEMENT_ROUTES)
+      },
+      {
         path: 'run-rule-engine',
         canActivate: [roleGuard],
         data: { roles: ['BANK_ADMIN'] },
