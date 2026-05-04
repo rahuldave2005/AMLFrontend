@@ -21,13 +21,29 @@ export class AlertDetailComponent implements OnInit {
   private readonly navService = inject(NavigationService);
   private readonly authService = inject(AuthService);
 
-  alert$!: Observable<AlertDetailDto>;
+  alert: AlertDetailDto | null = null;
+  isLoading = false;
 
   ngOnInit(): void {
     const alertNumber = this.route.snapshot.paramMap.get('alertNumber');
     if (alertNumber) {
-      this.alert$ = this.alertService.getAlertDetail(alertNumber);
+      this.loadAlertDetail(alertNumber);
     }
+  }
+
+  loadAlertDetail(alertNumber: string): void {
+    this.isLoading = true;
+    this.alertService.getAlertDetail(alertNumber).subscribe({
+      next: (data) => {
+        this.alert = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching alert details', err);
+        this.isLoading = false;
+        this.alert = null;
+      }
+    });
   }
 
   goBack(): void {

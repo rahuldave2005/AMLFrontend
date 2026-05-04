@@ -18,7 +18,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError((error) => {
-      if (error instanceof HttpErrorResponse && !authReq.url.includes('auth/login') && error.status === 401) {
+      const isAuthRequest = authReq.url.includes('auth/login') || authReq.url.includes('auth/refreshtoken');
+      
+      console.log(`[Auth Interceptor] Request failed: ${authReq.url}`, {
+        status: error.status,
+        isAuthRequest,
+        hasToken: !!token
+      });
+
+      if (error instanceof HttpErrorResponse && !isAuthRequest && error.status === 401) {
+        console.log('[Auth Interceptor] 401 Detected, initiating refresh flow...');
         return handle401Error(authReq, next, authService);
       }
       return throwError(() => error);
@@ -40,21 +49,25 @@ const handle401Error = (request: HttpRequest<any>, next: HttpHandlerFn, authServ
     refreshTokenSubject.next(null);
 
     const refreshToken = authService.getRefreshToken();
+    console.log('[Auth Interceptor] Found refresh token:', !!refreshToken);
 
     if (refreshToken) {
       return authService.refreshToken(refreshToken).pipe(
         switchMap((response) => {
+          console.log('[Auth Interceptor] Token refresh successful');
           isRefreshing = false;
           refreshTokenSubject.next(response.jwt);
           return next(addTokenHeader(request, response.jwt, response.prefix || 'Bearer'));
         }),
         catchError((err) => {
+          console.error('[Auth Interceptor] Token refresh failed:', err);
           isRefreshing = false;
           authService.logout();
           return throwError(() => err);
         })
       );
     } else {
+      console.warn('[Auth Interceptor] No refresh token available, logging out');
       isRefreshing = false;
       authService.logout();
       return throwError(() => new Error('No refresh token available'));

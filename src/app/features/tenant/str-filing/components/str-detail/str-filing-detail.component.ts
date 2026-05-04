@@ -18,7 +18,8 @@ export class StrFilingDetailComponent implements OnInit {
   private readonly strFilingService = inject(StrFilingService);
   private readonly authService = inject(AuthService);
 
-  filing$!: Observable<StrFilingDetailDto>;
+  filing: StrFilingDetailDto | null = null;
+  isLoading = false;
 
   get isComplianceOfficer(): boolean {
     return this.authService.getCurrentUser()?.roles.includes('COMPLIANCE_OFFICER') || false;
@@ -27,8 +28,23 @@ export class StrFilingDetailComponent implements OnInit {
   ngOnInit(): void {
     const ref = this.route.snapshot.paramMap.get('referenceNumber');
     if (ref) {
-      this.filing$ = this.strFilingService.getStrFilingDetails(ref);
+      this.loadFilingDetails(ref);
     }
+  }
+
+  loadFilingDetails(ref: string): void {
+    this.isLoading = true;
+    this.strFilingService.getStrFilingDetails(ref).subscribe({
+      next: (data) => {
+        this.filing = data;
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error loading filing details:', err);
+        this.isLoading = false;
+        this.filing = null;
+      }
+    });
   }
 
   downloadPdf(url: string, ref: string): void {

@@ -6,12 +6,15 @@
       <p class="text-muted">Monitor and manage all system-generated alerts.</p>
     </div>
     <div class="d-flex gap-2">
-      <button class="btn" [ngClass]="isSelectionMode ? 'btn-outline-secondary' : 'btn-primary'" (click)="toggleSelectionMode()">
+      <button class="btn" [ngClass]="isSelectionMode ? 'btn-outline-secondary' : 'btn-primary'"
+        (click)="toggleSelectionMode()">
         <i class="bi" [ngClass]="isSelectionMode ? 'bi-x-lg' : 'bi-plus-circle-fill'"></i>
         {{ isSelectionMode ? 'Cancel Selection' : 'Create Case' }}
       </button>
-      <button *ngIf="isSelectionMode" class="btn btn-success" (click)="openAssignModal()" [disabled]="selectedAlerts.size === 0">
-        <i class="bi bi-arrow-right-circle-fill"></i> Proceed for {{ selectedClientNumber || '...' }} ({{ selectedAlerts.size }})
+      <button *ngIf="isSelectionMode" class="btn btn-success" (click)="openAssignModal()"
+        [disabled]="selectedAlerts.size === 0">
+        <i class="bi bi-arrow-right-circle-fill"></i> Proceed for {{ selectedClientNumber || '...' }} ({{
+        selectedAlerts.size }})
       </button>
     </div>
   </div>
@@ -23,9 +26,8 @@
         <span class="input-group-text bg-white border-end-0">
           <i class="bi bi-search text-muted"></i>
         </span>
-        <input type="text" class="form-control border-start-0 ps-0" 
-               placeholder="Search by Alert Number..." 
-               [formControl]="searchControl">
+        <input type="text" class="form-control border-start-0 ps-0" placeholder="Search by Alert Number..."
+          [formControl]="searchControl">
       </div>
     </div>
     <div class="col-md-3">
@@ -65,15 +67,15 @@
                 <span class="text-muted">Loading alerts...</span>
               </td>
             </tr>
-            
+
             <ng-container *ngIf="!isLoading">
               <tr *ngFor="let alert of alerts" [class.table-primary-soft]="selectedAlerts.has(alert.alertNumber)">
                 <td *ngIf="isSelectionMode" class="px-4 py-3">
-                  <div class="form-check" [title]="(selectedClientNumber && selectedClientNumber !== alert.clientNumber) ? 'Only alerts for client ' + selectedClientNumber + ' can be selected' : (alert.status !== 'NEW' ? 'Only NEW alerts can be converted to cases' : '')">
-                    <input class="form-check-input" type="checkbox" 
-                           [checked]="selectedAlerts.has(alert.alertNumber)"
-                           (change)="onAlertSelect(alert, $event)"
-                           [disabled]="(selectedClientNumber !== null && selectedClientNumber !== alert.clientNumber) || alert.status !== 'NEW'">
+                  <div class="form-check"
+                    [title]="(selectedClientNumber && selectedClientNumber !== alert.clientNumber) ? 'Only alerts for client ' + selectedClientNumber + ' can be selected' : (alert.status !== 'NEW' ? 'Only NEW alerts can be converted to cases' : '')">
+                    <input class="form-check-input" type="checkbox" [checked]="selectedAlerts.has(alert.alertNumber)"
+                      (change)="onAlertSelect(alert, $event)"
+                      [disabled]="(selectedClientNumber !== null && selectedClientNumber !== alert.clientNumber) || alert.status !== 'NEW'">
                   </div>
                 </td>
                 <td class="px-4 py-3">
@@ -100,12 +102,13 @@
                   {{ alert.generatedAt | date:'MMM d, y, h:mm a' }}
                 </td>
                 <td class="px-4 py-3 text-end">
-                  <a [routerLink]="[alert.alertNumber]" class="btn btn-sm btn-outline-primary fw-bold" [class.disabled]="isSelectionMode">
+                  <a [routerLink]="[alert.alertNumber]" class="btn btn-sm btn-outline-primary fw-bold"
+                    [class.disabled]="isSelectionMode">
                     <i class="bi bi-eye-fill me-1"></i> Details
                   </a>
                 </td>
               </tr>
-              
+
               <tr *ngIf="alerts.length === 0">
                 <td [attr.colspan]="isSelectionMode ? 8 : 7" class="text-center py-5">
                   <div class="text-muted">
@@ -119,7 +122,7 @@
         </table>
       </div>
     </div>
-    
+
     <!-- Pagination Footer -->
     <div class="card-footer bg-white border-0 p-3">
       <div class="d-flex justify-content-between align-items-center">
@@ -127,14 +130,12 @@
           Page <strong>{{ currentPage + 1 }}</strong>
         </div>
         <div class="btn-group">
-          <button class="btn btn-sm btn-outline-secondary px-3" 
-                  [disabled]="currentPage === 0 || isLoading" 
-                  (click)="prevPage()">
+          <button class="btn btn-sm btn-outline-secondary px-3" [disabled]="currentPage === 0 || isLoading"
+            (click)="prevPage()">
             <i class="bi bi-chevron-left me-1"></i> Previous
           </button>
-          <button class="btn btn-sm btn-outline-secondary px-3" 
-                  [disabled]="isLastPage || isLoading" 
-                  (click)="nextPage()">
+          <button class="btn btn-sm btn-outline-secondary px-3" [disabled]="isLastPage || isLoading"
+            (click)="nextPage()">
             Next <i class="bi bi-chevron-right ms-1"></i>
           </button>
         </div>
@@ -152,8 +153,9 @@
           <button type="button" class="btn-close btn-close-white" (click)="closeAssignModal()"></button>
         </div>
         <div class="modal-body p-4">
-          <p class="text-muted mb-4">You have selected <strong>{{ selectedAlerts.size }}</strong> alerts. Please select a compliance officer to assign this case to.</p>
-          
+          <p class="text-muted mb-4">You have selected <strong>{{ selectedAlerts.size }}</strong> alerts. Please select
+            a compliance officer to assign this case to.</p>
+
           <div class="mb-3">
             <label class="form-label fw-bold text-dark small text-uppercase">Compliance Officer</label>
             <select class="form-select form-select-lg border-2" [(ngModel)]="assignedTo">
@@ -167,7 +169,8 @@
           </div>
         </div>
         <div class="modal-footer bg-light p-3">
-          <button type="button" class="btn btn-outline-secondary px-4 fw-bold" (click)="closeAssignModal()">Cancel</button>
+          <button type="button" class="btn btn-outline-secondary px-4 fw-bold"
+            (click)="closeAssignModal()">Cancel</button>
           <button type="button" class="btn btn-primary px-4 fw-bold" (click)="createCase()" [disabled]="!assignedTo">
             <i class="bi bi-check-circle-fill me-1"></i> Create & Assign Case
           </button>

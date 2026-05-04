@@ -87,17 +87,19 @@ export class AuthService {
   }
 
   private persistSession(response: LoginResponseDto): void {
-    localStorage.setItem(this.STORAGE_KEYS.TOKEN, response.jwt || '');
-    localStorage.setItem(this.STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken || '');
-    localStorage.setItem(this.STORAGE_KEYS.PREFIX, response.prefix || 'Bearer');
-    localStorage.setItem(this.STORAGE_KEYS.EMAIL, response.email || '');
-    localStorage.setItem(this.STORAGE_KEYS.BANK_NAME, response.bankName || '');
-    localStorage.setItem(this.STORAGE_KEYS.FIRST_NAME, response.firstName || '');
-    localStorage.setItem(this.STORAGE_KEYS.LAST_NAME, response.lastName || '');
-    localStorage.setItem(this.STORAGE_KEYS.IS_FIRST_LOGIN, String(response.isFirstLogin));
+    if (response.jwt) localStorage.setItem(this.STORAGE_KEYS.TOKEN, response.jwt);
+    if (response.refreshToken) localStorage.setItem(this.STORAGE_KEYS.REFRESH_TOKEN, response.refreshToken);
+    if (response.prefix) localStorage.setItem(this.STORAGE_KEYS.PREFIX, response.prefix);
+    if (response.email) localStorage.setItem(this.STORAGE_KEYS.EMAIL, response.email);
+    if (response.bankName) localStorage.setItem(this.STORAGE_KEYS.BANK_NAME, response.bankName);
+    if (response.firstName) localStorage.setItem(this.STORAGE_KEYS.FIRST_NAME, response.firstName);
+    if (response.lastName) localStorage.setItem(this.STORAGE_KEYS.LAST_NAME, response.lastName);
+    if (response.isFirstLogin !== undefined) localStorage.setItem(this.STORAGE_KEYS.IS_FIRST_LOGIN, String(response.isFirstLogin));
     
     const user = this.mapResponseToUser(response);
-    localStorage.setItem(this.STORAGE_KEYS.ROLES, JSON.stringify(user.roles));
+    if (user.roles && user.roles.length > 0) {
+      localStorage.setItem(this.STORAGE_KEYS.ROLES, JSON.stringify(user.roles));
+    }
     
     this.currentUserSubject.next(user);
   }
@@ -133,22 +135,25 @@ export class AuthService {
   }
 
   private mapResponseToUser(response: LoginResponseDto): AuthUser {
-    // 1. If explicit roles are provided, use them
-    // 2. If not, try to extract from JWT
-    // 3. Fallback to empty
+    // Merge with current user to handle partial updates from refresh
+    const currentUser = this.currentUserSubject.value;
+
     let roles = response.roles && response.roles.length > 0 
       ? response.roles 
-      : this.extractRolesFromJwt(response.jwt, []);
+      : this.extractRolesFromJwt(response.jwt, currentUser?.roles || []);
 
     return {
-      email: response.email || 'user@example.com',
-      bankName: response.bankName || 'Unknown Bank',
+      email: response.email || currentUser?.email || 'user@example.com',
+      bankName: response.bankName || currentUser?.bankName || 'Unknown Bank',
       roles,
-      primaryRole: roles[0] ?? 'USER',
-      initials: this.buildInitials(response.firstName, response.lastName),
-      firstName: response.firstName || '',
-      lastName: response.lastName || '',
-      isFirstLogin: response.isFirstLogin || false
+      primaryRole: roles[0] ?? currentUser?.primaryRole ?? 'USER',
+      initials: this.buildInitials(
+        response.firstName || currentUser?.firstName || '', 
+        response.lastName || currentUser?.lastName || ''
+      ),
+      firstName: response.firstName || currentUser?.firstName || '',
+      lastName: response.lastName || currentUser?.lastName || '',
+      isFirstLogin: response.isFirstLogin ?? currentUser?.isFirstLogin ?? false
     };
   }
 

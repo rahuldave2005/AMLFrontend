@@ -27,7 +27,8 @@ export class CaseDetailComponent implements OnInit {
   private readonly strFilingService = inject(StrFilingService);
   private readonly sanitizer = inject(DomSanitizer);
 
-  case$!: Observable<CaseDetailDto>;
+  caseData: CaseDetailDto | null = null;
+  isLoading = false;
   
   // Action properties
   showActionModal = false;
@@ -56,7 +57,18 @@ export class CaseDetailComponent implements OnInit {
   loadCaseDetail(): void {
     const caseRef = this.route.snapshot.paramMap.get('caseReferenceNumber');
     if (caseRef) {
-      this.case$ = this.caseService.getCaseDetail(caseRef);
+      this.isLoading = true;
+      this.caseService.getCaseDetail(caseRef).subscribe({
+        next: (data) => {
+          this.caseData = data;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Error fetching case details:', err);
+          this.isLoading = false;
+          this.caseData = null;
+        }
+      });
     }
   }
 

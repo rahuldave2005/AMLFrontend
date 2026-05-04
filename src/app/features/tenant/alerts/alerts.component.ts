@@ -20,7 +20,7 @@ export class AlertsComponent implements OnInit {
   private readonly alertService = inject(AlertService);
   private readonly userService = inject(UserManagementService);
   private readonly caseService = inject(CaseService);
-  
+
   alerts: GeneratedAlertDto[] = [];
   complianceOfficers$!: Observable<TenantUserDashboardDto>;
 
@@ -28,7 +28,7 @@ export class AlertsComponent implements OnInit {
   isSelectionMode = false;
   selectedAlerts = new Set<string>();
   selectedClientNumber: string | null = null;
-  
+
   // Modal state
   showAssignModal = false;
   assignedTo = '';
@@ -39,7 +39,7 @@ export class AlertsComponent implements OnInit {
   isLastPage = false;
   selectedStatus: AlertStatus | null = null;
   isLoading = false;
-  
+
   searchControl = new FormControl('');
   readonly statuses = Object.values(AlertStatus);
 

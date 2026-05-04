@@ -20,9 +20,12 @@
       </div>
     </div>
     <div class="col-md-3" *ngIf="!isComplianceOfficer">
-      <input type="text" class="form-control shadow-sm" 
-             placeholder="Filter by Assigned Email..." 
-             [(ngModel)]="assignedToEmail" (ngModelChange)="onFilterChange()">
+      <select class="form-select shadow-sm" [(ngModel)]="assignedToEmail" (change)="onFilterChange()">
+        <option value="">All Officers</option>
+        <option *ngFor="let officer of officers" [value]="officer.email">
+          {{ officer.firstName }} {{ officer.lastName }} ({{ officer.employeeCode }})
+        </option>
+      </select>
     </div>
     <div class="col-md-3">
       <select class="form-select shadow-sm" [(ngModel)]="selectedStatus" (change)="onFilterChange()">

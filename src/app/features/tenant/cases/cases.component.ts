@@ -4,7 +4,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CaseService } from '../../../core/services/case.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { UserManagementService } from '../../../core/services/user-management.service';
 import { CaseDashboardDto, CaseStatus } from '../../../core/models/case.models';
+import { TenantUserInlineDto } from '../../../core/models/user-management.models';
 import { Subject, debounceTime, distinctUntilChanged, finalize } from 'rxjs';
 
 @Component({
@@ -18,7 +20,10 @@ export class CasesComponent implements OnInit {
   private readonly caseService = inject(CaseService);
   private readonly authService = inject(AuthService);
   
+  private readonly userService = inject(UserManagementService);
+  
   cases: CaseDashboardDto[] = [];
+  officers: TenantUserInlineDto[] = [];
   isLoading = false;
 
   // Pagination & Filtering
@@ -37,6 +42,12 @@ export class CasesComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadCases();
+    
+    // Only bank admins should be able to filter by other officers
+    const user = this.authService.getCurrentUser();
+    if (user?.roles.includes('BANK_ADMIN')) {
+      this.loadOfficers();
+    }
 
     // Setup search for case reference number with debounce
     this.caseRefControl.valueChanges.pipe(
@@ -66,6 +77,17 @@ export class CasesComponent implements OnInit {
       error: (err) => {
         console.error('Error loading cases:', err);
         this.cases = [];
+      }
+    });
+  }
+
+  loadOfficers(): void {
+    this.userService.getComplianceOfficers().subscribe({
+      next: (data) => {
+        this.officers = data.userInlineDtoList;
+      },
+      error: (err) => {
+        console.error('Error loading officers for filter:', err);
       }
     });
   }
